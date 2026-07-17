@@ -1,0 +1,62 @@
+[
+  {
+    "image": "shelf_front.png",
+    "worker": "Worker-A",
+    "latency_ms": 22.012,
+    "route_latency_ms": 21.958,
+    "worker_latency_ms": 0.055,
+    "raw_worker": "Worker-A",
+    "strategy": "single_worker",
+    "confidence": 0.5583,
+    "gate_upgraded": false,
+    "gate_reasons": [
+      "multi_image",
+      "low_confidence",
+      "intent_confidence_override"
+    ],
+    "query_intent": "retail_visual",
+    "execution_error": null,
+    "expected_worker": "Worker-A",
+    "routing_error": false
+  },
+  {
+    "image": "shelf_oblique.png",
+    "worker": "Worker-A",
+    "latency_ms": 10.504,
+    "route_latency_ms": 10.431,
+    "worker_latency_ms": 0.073,
+    "raw_worker": "Worker-A",
+    "strategy": "single_worker",
+    "confidence": 0.5549,
+    "gate_upgraded": false,
+    "gate_reasons": [
+      "multi_image",
+      "low_confidence",
+      "intent_confidence_override"
+    ],
+    "query_intent": "retail_visual",
+    "execution_error": null,
+    "expected_worker": "Worker-A",
+    "routing_error": false
+  },
+  {
+    "image": "shelf_sparse.png",
+    "worker": "Worker-A",
+    "latency_ms": 10.184,
+    "route_latency_ms": 10.135,
+    "worker_latency_ms": 0.049,
+    "raw_worker": "Worker-A",
+    "strategy": "single_worker",
+    "confidence": 0.5558,
+    "gate_upgraded": false,
+    "gate_reasons": [
+      "multi_image",
+      "low_confidence",
+      "intent_confidence_override"
+    ],
+    "query_intent": "retail_visual",
+    "execution_error": null,
+    "expected_worker": "Worker-A",
+    "routing_error": false
+  }
+]

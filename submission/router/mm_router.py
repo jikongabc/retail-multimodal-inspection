@@ -17,7 +17,10 @@ from pathlib import Path
 
 import numpy as np
 
-from feature_extractor import FeatureConfig, MultimodalFeatureExtractor, WORKERS
+try:
+    from .feature_extractor import FeatureConfig, MultimodalFeatureExtractor, WORKERS
+except ImportError:
+    from feature_extractor import FeatureConfig, MultimodalFeatureExtractor, WORKERS
 
 
 @dataclass
@@ -61,7 +64,6 @@ class SepCMAES:
             elite = candidates[order[:mu]]
             elite_z = z[order[:mu]]
             mean = np.sum(elite * weights[:, None], axis=0)
-            # Rank-one diagonal adaptation; clipping prevents numerical blowup.
             diag = np.clip(0.85 * diag + 0.15 * np.sum((elite_z**2) * weights[:, None], axis=0), 0.20, 5.0)
             spread = float(np.std(scores))
             sigma = float(np.clip(sigma * (1.02 if spread > 0.03 else 0.985), 0.035, 1.2))
@@ -114,9 +116,6 @@ class MultimodalRouter:
             reasons.append("low_confidence")
         if margin < 0.08:
             reasons.append("low_margin")
-        # Explicitly text-only requests should go to the report worker even if
-        # the image looks like a safety/shelf scene. This is the opposite of a
-        # visual conflict: the caller has told us not to re-run perception.
         explicit_text_only = any(token in query_lower for token in (
             "不要重新识别", "不重新识别", "已有巡检结果", "文字结果", "仅根据上游", "不要做视觉判断",
         )) and bool(flags[4] or flags[13])
@@ -125,9 +124,6 @@ class MultimodalRouter:
 
         scene_hint = self.extractor.image_scene_hint(image_path)
         scene = scene_hint["scene"]
-        # Query intent is intentionally coarse. It is a safety gate, not a
-        # replacement for semantic routing. Negated inventory wording avoids
-        # treating “不要数商品” as an inventory request.
         negated_inventory = any(token in query_lower for token in ("不要数商品", "不要执行盘点", "不要判断库存", "不做库存"))
         has_open_intent = bool(flags[6])
         has_inventory_intent = bool(flags[0]) and not negated_inventory
@@ -163,9 +159,6 @@ class MultimodalRouter:
         if conflict:
             reasons.append("image_query_conflict")
 
-        # Resolve conflict according to query intent. Only an ambiguous request
-        # is escalated to D; a clear “describe / count / summarize” instruction
-        # should not be overridden by image appearance.
         if explicit_text_only:
             final_idx = 2
         elif conflict and query_intent == "unknown":
@@ -177,9 +170,6 @@ class MultimodalRouter:
         elif query_intent in ("open", "retail_visual", "report") and any(
             reason in reasons for reason in ("low_confidence", "low_margin")
         ):
-            # Real photographs are more heterogeneous than the synthetic
-            # controls. A clear user intent takes precedence over generic
-            # uncertainty; D remains reserved for ambiguous/complex intent.
             reasons.append("intent_confidence_override")
             final_idx = {"open": 1, "retail_visual": 0, "report": 2}[query_intent]
         elif query_intent in ("open", "retail_visual", "report"):
@@ -219,8 +209,6 @@ class MultimodalRouter:
 
         def objective(flat):
             logits = self._logits(X, flat)
-            # Optimize the *online* decision, including the D gate. This keeps
-            # the objective and deployed behavior aligned.
             shifted = logits - logits.max(axis=1, keepdims=True)
             probs = np.exp(shifted)
             probs /= probs.sum(axis=1, keepdims=True)

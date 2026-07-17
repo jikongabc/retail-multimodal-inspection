@@ -1,0 +1,80 @@
+{
+  "store_id": "store-safety-002",
+  "inspection_time": "2026-07-17T17:45:55Z",
+  "overall_score": 45,
+  "routing_log": [
+    {
+      "image": "exit_obstructed.png",
+      "worker": "Worker-D",
+      "latency_ms": 11.103,
+      "route_latency_ms": 10.406,
+      "worker_latency_ms": 0.697,
+      "raw_worker": "Worker-D",
+      "strategy": "parallel_ab_aggregate",
+      "confidence": 0.6929,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "complex_keyword",
+        "high_risk",
+        "multi_image"
+      ],
+      "query_intent": "complex",
+      "execution_error": null,
+      "expected_worker": "Worker-D",
+      "routing_error": false
+    },
+    {
+      "image": "fire_exit.png",
+      "worker": "Worker-D",
+      "latency_ms": 11.115,
+      "route_latency_ms": 10.476,
+      "worker_latency_ms": 0.639,
+      "raw_worker": "Worker-D",
+      "strategy": "parallel_ab_aggregate",
+      "confidence": 0.7117,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "complex_keyword",
+        "high_risk",
+        "multi_image"
+      ],
+      "query_intent": "complex",
+      "execution_error": null,
+      "expected_worker": "Worker-D",
+      "routing_error": false
+    }
+  ],
+  "findings": [
+    {
+      "category": "safety_obstruction",
+      "severity": "high",
+      "description": "消防出口/通道附近出现疑似障碍物。",
+      "image_ref": "exit_obstructed.png"
+    },
+    {
+      "category": "safety_obstruction",
+      "severity": "high",
+      "description": "消防出口/通道附近出现疑似障碍物。",
+      "image_ref": "fire_exit.png"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "消防通道无遮挡",
+      "status": "fail",
+      "evidence": "exit_obstructed.png 中出口前方可见障碍物或警示区域被占用。 | fire_exit.png 中出口前方可见障碍物或警示区域被占用。"
+    }
+  ],
+  "recommendations": [
+    "立即清理消防出口和通道附近的障碍物，并由现场负责人复核。"
+  ],
+  "request_id": "scenario_2_compliance",
+  "inspection_type": "合规检查",
+  "mock_mode": true,
+  "warnings": [
+    "本报告由 Mock Worker 生成，仅用于 Pipeline 联调，不代表真实模型效果。"
+  ],
+  "model_versions": [
+    "parallel(mock-worker_a-v1,mock-worker_b-v1)"
+  ]
+}

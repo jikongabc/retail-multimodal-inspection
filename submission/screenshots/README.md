@@ -1,11 +1,9 @@
-# Task 0 screenshots
+# Task 0 证据文件
 
-Place the required evidence images in this directory using these exact names:
+文件：
 
 - `openfugu_selftest.png`
 - `ostrakon_5scenes.png`
-
-Optional additional evidence:
 
 - `openfugu_server_real.png`
 - `openfugu_3queries_real.png`

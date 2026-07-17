@@ -1,0 +1,121 @@
+{
+  "store_id": "store-mixed-003",
+  "inspection_time": "2026-07-17T17:45:55Z",
+  "overall_score": 55,
+  "routing_log": [
+    {
+      "image": "open_domain.png",
+      "worker": "Worker-D",
+      "latency_ms": 10.502,
+      "route_latency_ms": 9.889,
+      "worker_latency_ms": 0.614,
+      "raw_worker": "Worker-D",
+      "strategy": "parallel_ab_aggregate",
+      "confidence": 0.8374,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "complex_keyword",
+        "multi_image",
+        "uncertain"
+      ],
+      "query_intent": "complex",
+      "execution_error": null,
+      "expected_worker": "Worker-B",
+      "routing_error": true,
+      "routing_error_reason": "该图是开放域场景，未出现明确零售或高风险证据；综合评估提示使路由器保守升级到 D，增加了不必要的 A+B 成本。"
+    },
+    {
+      "image": "shelf_hybrid.png",
+      "worker": "Worker-D",
+      "latency_ms": 15.982,
+      "route_latency_ms": 15.147,
+      "worker_latency_ms": 0.835,
+      "raw_worker": "Worker-D",
+      "strategy": "parallel_ab_aggregate",
+      "confidence": 0.8458,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "complex_keyword",
+        "multi_image",
+        "uncertain"
+      ],
+      "query_intent": "complex",
+      "execution_error": null,
+      "expected_worker": "Worker-D",
+      "routing_error": false
+    },
+    {
+      "image": "conflict_exit.png",
+      "worker": "Worker-D",
+      "latency_ms": 11.077,
+      "route_latency_ms": 10.343,
+      "worker_latency_ms": 0.734,
+      "raw_worker": "Worker-D",
+      "strategy": "parallel_ab_aggregate",
+      "confidence": 0.8449,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "complex_keyword",
+        "multi_image",
+        "uncertain"
+      ],
+      "query_intent": "complex",
+      "execution_error": null,
+      "expected_worker": "Worker-D",
+      "routing_error": false
+    }
+  ],
+  "findings": [
+    {
+      "category": "safety_obstruction",
+      "severity": "high",
+      "description": "消防出口/通道附近出现疑似障碍物。",
+      "image_ref": "conflict_exit.png"
+    },
+    {
+      "category": "safety_obstruction",
+      "severity": "med",
+      "description": "可见警示区域，但障碍物是否侵入有效通道存在不确定性。",
+      "image_ref": "conflict_exit.png"
+    },
+    {
+      "category": "open_scene",
+      "severity": "low",
+      "description": "图片主要呈现开放域场景，不足以支持零售库存结论。",
+      "image_ref": "open_domain.png"
+    },
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_hybrid.png"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "消防通道无遮挡",
+      "status": "unclear",
+      "evidence": "检测到 Worker 证据冲突：conflict_exit.png: conflict_exit.png 中出口前方可见障碍物或警示区域被占用。 | conflict_exit.png: conflict_exit.png 中未能确认有效通道被完全封堵。"
+    },
+    {
+      "item": "货架陈列可见性",
+      "status": "pass",
+      "evidence": "shelf_hybrid.png 中可见货架层和商品面。"
+    }
+  ],
+  "recommendations": [
+    "立即清理消防出口和通道附近的障碍物，并由现场负责人复核。",
+    "对空货位进行补货复核，并将盘点结果与库存系统对账。",
+    "该图片不属于明确零售证据，避免据此作库存或合规结论。",
+    "对冲突或不清晰的合规项补拍近景，并安排人工复核。"
+  ],
+  "request_id": "scenario_3_comprehensive",
+  "inspection_type": "综合评估",
+  "mock_mode": true,
+  "warnings": [
+    "本报告由 Mock Worker 生成，仅用于 Pipeline 联调，不代表真实模型效果。"
+  ],
+  "model_versions": [
+    "parallel(mock-worker_a-v1,mock-worker_b-v1)"
+  ]
+}

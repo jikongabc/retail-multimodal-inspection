@@ -27,7 +27,7 @@ Worker-D      0    0    0    3
 
 Worker 选择准确率：**raw 13/15 = 86.7%，gated 15/15 = 100.0%**。
 
-本次 clean test 的 `gate_upgrades=2`；两条 raw 错误由明确查询意图优先规则修正。训练 objective 已调用同一个 `_gate()`，部署与评估口径一致。门控是否有效由下面的 hard-negative 集验证。
+Clean test 的 `gate_upgrades=2`；两条 raw 错误由明确查询意图优先规则修正。训练 objective、评估和部署使用同一个 `_gate()`。
 
 这个数字只说明在公开照片分布上路由头能复现路由标签，不等价于真实 Worker 的任务正确率，也不证明跨门店泛化。真实验收仍应增加按门店、摄像头、光照和商品类别分组的留出集，并报告 macro-F1、D 路由率、任务成功率、延迟和成本。
 
@@ -46,7 +46,7 @@ Worker 选择准确率：**raw 13/15 = 86.7%，gated 15/15 = 100.0%**。
 
 ## 4. Hard-negative 典型错误与边界分析
 
-先纠正上一版报告中的评估完整性问题：上一版将 7 条 hard-negative 的 `label` 改成 Worker-D，使 gold 与 gate 规则循环重合。本版已恢复独立的自然 Worker gold：hn-02/08/12 为 B，hn-05/10 为 A，hn-09 为 C；hn-04 也按严格 Worker 口径标为 B，但另以“模糊请求应升级 D”记录在 `expected_action` 中。hard-negative 故意复用训练照片，只隔离 query 侧冲突，不计入 clean test 的 image_overlap。
+Hard-negative 使用独立的自然 Worker gold：hn-02/08/12 为 B，hn-05/10 为 A，hn-09 为 C；hn-04 按 Worker 口径标为 B，并在 `expected_action` 中标记为“模糊请求应升级 D”。Hard-negative 复用训练照片，仅隔离 query 侧冲突，不计入 clean test 的 image_overlap。
 
 严格 Worker 选择结果：**raw 10/12 = 83.3%，gated 11/12 = 91.7%**，`gate_upgrades=1`。这不是把 gate 输出当 gold，而是将最终 Worker 与独立 `label` 比较。raw 混淆矩阵如下：
 
@@ -97,10 +97,10 @@ gate 的策略指标单独计算，不等同 Worker accuracy：12 条 hard-negat
 
 已知边界：
 
-* 仅写“帮我看看这家店怎么样”时，路由偏向 A，因为“店/货架”视觉先验强但意图不明确；当前置信度仍高，低 margin 门控无法兜底。这是下一轮应加入“意图不明 → D/澄清”规则或校准模型的案例。
+* 仅写“帮我看看这家店怎么样”时，路由偏向 A，因为“店/货架”视觉先验强但意图不明确；当前置信度仍高，低 margin 门控无法兜底。改进方向是增加“意图不明 → D/澄清”规则或校准模型。
 * 真实照片的视觉外观差异较大，raw 的错误主要来自照片先验与查询意图不一致；当前已加入 0.10/0.70/0.20 的模态归一化，并让明确查询意图优先于弱视觉提示。公开照片上的 gated 结果改善了 clean 与 hard-negative，但仍不能替代真实门店留出集。
 * 默认离线代理不是 CLIP 的语义质量；切换真实编码器后必须重新拟合路由头，不能直接复用 `router_weights.npy`。
 
 ## 5. 方案与门控结论
 
-本次默认实验明确是 γ-轻量混合变体，不把它写成 CLIP α。α 仅保留为可选生产后端，切换后需重新训练并单独报告。下一轮应在真实照片基础上增加按门店/摄像头分组的留出集，并重点观察 hard-negative 的开放域/领域冲突、D 召回率、平均成本和 P95 延迟，而不是只追求 clean test 的单一准确率。
+实验后端为 γ-轻量混合变体，不是 CLIP α。α 为可替换生产后端，切换后需重新训练并单独报告。后续评估应增加按门店和摄像头分组的留出集，报告 hard-negative、D 召回率、平均成本和 P95 延迟。

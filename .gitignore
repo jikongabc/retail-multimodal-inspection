@@ -1,3 +1,12 @@
 /docs/
 __pycache__
 fixtures/
+
+# Pipeline development helpers excluded from the assignment submission.
+submission/pipeline/__init__.py
+submission/pipeline/demos/index.json
+submission/pipeline/demos/render_screenshots.py
+submission/pipeline/demos/run_demos.py
+submission/pipeline/demos/scenario_*/input.json
+submission/pipeline/demos/scenario_*/summary.json
+submission/pipeline/tests/

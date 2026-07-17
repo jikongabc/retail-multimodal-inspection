@@ -1,0 +1,106 @@
+{
+  "store_id": "store-shelf-001",
+  "inspection_time": "2026-07-17T17:45:54Z",
+  "overall_score": 85,
+  "routing_log": [
+    {
+      "image": "shelf_front.png",
+      "worker": "Worker-A",
+      "latency_ms": 22.012,
+      "route_latency_ms": 21.958,
+      "worker_latency_ms": 0.055,
+      "raw_worker": "Worker-A",
+      "strategy": "single_worker",
+      "confidence": 0.5583,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "multi_image",
+        "low_confidence",
+        "intent_confidence_override"
+      ],
+      "query_intent": "retail_visual",
+      "execution_error": null,
+      "expected_worker": "Worker-A",
+      "routing_error": false
+    },
+    {
+      "image": "shelf_oblique.png",
+      "worker": "Worker-A",
+      "latency_ms": 10.504,
+      "route_latency_ms": 10.431,
+      "worker_latency_ms": 0.073,
+      "raw_worker": "Worker-A",
+      "strategy": "single_worker",
+      "confidence": 0.5549,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "multi_image",
+        "low_confidence",
+        "intent_confidence_override"
+      ],
+      "query_intent": "retail_visual",
+      "execution_error": null,
+      "expected_worker": "Worker-A",
+      "routing_error": false
+    },
+    {
+      "image": "shelf_sparse.png",
+      "worker": "Worker-A",
+      "latency_ms": 10.184,
+      "route_latency_ms": 10.135,
+      "worker_latency_ms": 0.049,
+      "raw_worker": "Worker-A",
+      "strategy": "single_worker",
+      "confidence": 0.5558,
+      "gate_upgraded": false,
+      "gate_reasons": [
+        "multi_image",
+        "low_confidence",
+        "intent_confidence_override"
+      ],
+      "query_intent": "retail_visual",
+      "execution_error": null,
+      "expected_worker": "Worker-A",
+      "routing_error": false
+    }
+  ],
+  "findings": [
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_front.png"
+    },
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_oblique.png"
+    },
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_sparse.png"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "货架陈列可见性",
+      "status": "pass",
+      "evidence": "shelf_front.png 中可见货架层和商品面。 | shelf_oblique.png 中可见货架层和商品面。 | shelf_sparse.png 中可见货架层和商品面。"
+    }
+  ],
+  "recommendations": [
+    "对空货位进行补货复核，并将盘点结果与库存系统对账。"
+  ],
+  "request_id": "scenario_1_inventory",
+  "inspection_type": "商品盘点",
+  "mock_mode": true,
+  "warnings": [
+    "本报告由 Mock Worker 生成，仅用于 Pipeline 联调，不代表真实模型效果。"
+  ],
+  "model_versions": [
+    "mock-worker_a-v1"
+  ]
+}

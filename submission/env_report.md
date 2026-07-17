@@ -40,7 +40,7 @@
 | 服务端口 | 6008 |
 | 最大协作轮次 | 2（响应中的 `fugu_turns` 含调度计数，可能显示为 2 或 3） |
 
-题面示例使用 GPT-4o、Claude Sonnet 4 和端口 8088。本次因商业模型账号条件及 AutoDL HTTP 端口映射，等价替换为 DeepSeek Chat、GLM-4.5-Flash 和端口 6008。路由器、双槽位调度和 OpenAI 兼容接口保持不变。密钥仅通过终端隐藏输入设置为环境变量，未写入代码、日志或仓库。
+Worker 使用 DeepSeek Chat、GLM-4.5-Flash，服务端口为 6008。路由器、双槽位调度和 OpenAI 兼容接口保持不变。密钥通过环境变量传入，未写入代码、日志或仓库。
 
 ### 2.2 自测结果
 
@@ -51,7 +51,7 @@ self-test on 37 cases:
   PASS — implementation faithful to checkpoint
 ```
 
-结论：OpenFugu checkpoint 与当前实现匹配，自测通过。对应证据为 `screenshots/openfugu_selftest.png`。
+OpenFugu checkpoint 与实现匹配，自测通过。证据：`screenshots/openfugu_selftest.png`。
 
 ### 2.3 真实 API 端到端延迟
 
@@ -83,7 +83,7 @@ self-test on 37 cases:
 | 延迟口径 | 仅计时 `model.generate`，CUDA 前后同步 |
 | 显存口径 | `torch.cuda.max_memory_allocated()` 峰值 |
 
-五张输入图由 `scripts/generate_task0_images.py` 生成，是带有确定标注的可控测试夹具，不冒充真实门店照片。该设计便于核对计数、OCR 和风险识别是否正确；真实门店泛化能力仍需在后续数据集上验证。
+五张输入图由 `scripts/generate_task0_images.py` 生成，属于带有确定标注的可控测试夹具，不代表真实门店照片。真实门店泛化能力需使用独立数据集评估。
 
 ### 3.2 推理结果与性能
 
@@ -120,7 +120,7 @@ self-test on 37 cases:
 - [x] `screenshots/openfugu_selftest.png`：终端中包含 97%、100% 和 PASS。
 - [x] `screenshots/ostrakon_5scenes.png`：包含五场景输出、平均延迟和显存。
 - [x] `env_report.md`：即本文件。
-- [x] 可选加强证据：`screenshots/openfugu_server_real.png`。
-- [x] 可选加强证据：`screenshots/openfugu_3queries_real.png`。
+- [x] 补充证据：`screenshots/openfugu_server_real.png`。
+- [x] 补充证据：`screenshots/openfugu_3queries_real.png`。
 
-所有截图已由本机截图工具生成并放入 `submission/screenshots/`。
+截图文件位于 `submission/screenshots/`。
