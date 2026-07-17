@@ -1,7 +1,4 @@
-"""Inspection report schema validation.
-
-Python 3.10+; dependencies: standard library.
-"""
+# 巡检报告结构校验。
 
 from __future__ import annotations
 
@@ -23,10 +20,12 @@ SEVERITIES = {"high", "med", "low"}
 COMPLIANCE_STATUSES = {"pass", "fail", "unclear"}
 
 
+# 表示报告不符合结构约束。
 class ReportValidationError(ValueError):
-    """Raised when a synthesized report does not satisfy the assignment schema."""
+    pass
 
 
+# 检查对象是否包含指定字段。
 def _require(mapping: Mapping[str, Any], key: str, errors: list[str]) -> Any:
     if key not in mapping:
         errors.append(f"missing field: {key}")
@@ -34,8 +33,8 @@ def _require(mapping: Mapping[str, Any], key: str, errors: list[str]) -> Any:
     return mapping[key]
 
 
+# 校验报告字段、枚举值和数值范围。
 def validate_report(report: Mapping[str, Any]) -> None:
-    """Validate the required JSON shape and constrained enum/range values."""
     errors: list[str] = []
     if not isinstance(report, Mapping):
         raise ReportValidationError("report must be a JSON object")
@@ -51,11 +50,17 @@ def validate_report(report: Mapping[str, Any]) -> None:
         try:
             parsed_timestamp = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
             if parsed_timestamp.tzinfo is None:
-                errors.append("inspection_time must include a timezone (Z or UTC offset)")
+                errors.append(
+                    "inspection_time must include a timezone (Z or UTC offset)"
+                )
         except ValueError:
             errors.append("inspection_time must be a valid ISO-8601 timestamp")
     score = report.get("overall_score")
-    if isinstance(score, bool) or not isinstance(score, (int, float)) or not 0 <= score <= 100:
+    if (
+        isinstance(score, bool)
+        or not isinstance(score, (int, float))
+        or not 0 <= score <= 100
+    ):
         errors.append("overall_score must be a number in [0, 100]")
 
     routing_log = report.get("routing_log")
@@ -71,7 +76,11 @@ def validate_report(report: Mapping[str, Any]) -> None:
             if not isinstance(entry.get("worker"), str) or not entry.get("worker"):
                 errors.append(f"routing_log[{index}].worker must be a string")
             latency = entry.get("latency_ms")
-            if isinstance(latency, bool) or not isinstance(latency, (int, float)) or latency < 0:
+            if (
+                isinstance(latency, bool)
+                or not isinstance(latency, (int, float))
+                or latency < 0
+            ):
                 errors.append(f"routing_log[{index}].latency_ms must be non-negative")
 
     findings = report.get("findings")
@@ -84,9 +93,13 @@ def validate_report(report: Mapping[str, Any]) -> None:
                 continue
             for field in ("category", "severity", "description", "image_ref"):
                 if not isinstance(finding.get(field), str) or not finding.get(field):
-                    errors.append(f"findings[{index}].{field} must be a non-empty string")
+                    errors.append(
+                        f"findings[{index}].{field} must be a non-empty string"
+                    )
             if finding.get("severity") not in SEVERITIES:
-                errors.append(f"findings[{index}].severity must be one of {sorted(SEVERITIES)}")
+                errors.append(
+                    f"findings[{index}].severity must be one of {sorted(SEVERITIES)}"
+                )
 
     compliance = report.get("compliance_items")
     if not isinstance(compliance, list):
@@ -98,20 +111,26 @@ def validate_report(report: Mapping[str, Any]) -> None:
                 continue
             for field in ("item", "status", "evidence"):
                 if not isinstance(item.get(field), str) or not item.get(field):
-                    errors.append(f"compliance_items[{index}].{field} must be a non-empty string")
+                    errors.append(
+                        f"compliance_items[{index}].{field} must be a non-empty string"
+                    )
             if item.get("status") not in COMPLIANCE_STATUSES:
-                errors.append(f"compliance_items[{index}].status must be one of {sorted(COMPLIANCE_STATUSES)}")
+                errors.append(
+                    f"compliance_items[{index}].status must be one of {sorted(COMPLIANCE_STATUSES)}"
+                )
 
     recommendations = report.get("recommendations")
-    if not isinstance(recommendations, list) or not all(isinstance(item, str) and item for item in recommendations):
+    if not isinstance(recommendations, list) or not all(
+        isinstance(item, str) and item for item in recommendations
+    ):
         errors.append("recommendations must be a list of non-empty strings")
 
     if errors:
         raise ReportValidationError("; ".join(errors))
 
 
+# 返回报告是否通过结构校验。
 def is_valid_report(report: Mapping[str, Any]) -> bool:
-    """Return a boolean convenience wrapper for tests and callers."""
     try:
         validate_report(report)
     except ReportValidationError:

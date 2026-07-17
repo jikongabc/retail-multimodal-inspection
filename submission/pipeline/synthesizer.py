@@ -1,7 +1,4 @@
-"""Evidence-aware report synthesis.
-
-Python 3.10+; dependencies: standard library.
-"""
+# 基于证据的巡检报告合成。
 
 from __future__ import annotations
 
@@ -18,9 +15,9 @@ COMPLIANCE_PENALTIES = {"fail": 15, "unclear": 5, "pass": 0}
 SEVERITY_ORDER = {"low": 0, "med": 1, "high": 2}
 
 
+# 合并 Worker 结果并生成巡检报告。
 class EvidenceSynthesizer:
-    """Merge normalized WorkerResults while retaining provenance and conflicts."""
-
+    # 合成标准化巡检报告。
     def synthesize(
         self,
         store_id: str,
@@ -35,11 +32,17 @@ class EvidenceSynthesizer:
         compliance = self._merge_compliance(results)
         warnings: list[str] = []
         if mock_mode:
-            warnings.append("本报告由 Mock Worker 生成，仅用于 Pipeline 联调，不代表真实模型效果。")
+            warnings.append(
+                "本报告由 Mock Worker 生成，仅用于 Pipeline 联调，不代表真实模型效果。"
+            )
         if any(item.get("error") for item in results):
-            warnings.append("至少一个 Worker 执行或解析失败；相关图片已保留错误证据，需人工复核。")
+            warnings.append(
+                "至少一个 Worker 执行或解析失败；相关图片已保留错误证据，需人工复核。"
+            )
         finding_penalty = sum(PENALTIES.get(item["severity"], 0) for item in findings)
-        compliance_penalty = sum(COMPLIANCE_PENALTIES.get(item["status"], 0) for item in compliance)
+        compliance_penalty = sum(
+            COMPLIANCE_PENALTIES.get(item["status"], 0) for item in compliance
+        )
         score = max(0, 100 - finding_penalty - compliance_penalty)
         report = {
             "store_id": store_id,
@@ -53,14 +56,16 @@ class EvidenceSynthesizer:
             "inspection_type": inspection_type,
             "mock_mode": mock_mode,
             "warnings": warnings,
-            "model_versions": sorted({item.get("model_revision", "unknown") for item in results}),
+            "model_versions": sorted(
+                {item.get("model_revision", "unknown") for item in results}
+            ),
         }
         validate_report(report)
         return report
 
     @staticmethod
+    # 展开 D 的来源结果以保留冲突信息。
     def _iter_result_sources(results: list[dict[str, Any]]):
-        """Yield source-level outputs so D conflicts remain visible."""
         for result in results:
             source_results = result.get("metadata", {}).get("source_results", [])
             if source_results:
@@ -68,26 +73,38 @@ class EvidenceSynthesizer:
             else:
                 yield result
 
+    # 合并并去重图片发现。
     def _merge_findings(self, results: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """Deduplicate identical evidence from the same image.
-
-        The key intentionally includes ``category``, ``image_ref`` and the
-        normalized ``description``. Thus two identical reports about one image
-        count once, while different descriptions or evidence from different
-        images remain separate findings.
-        """
         merged: dict[tuple[str, str, str], dict[str, Any]] = {}
         for result in self._iter_result_sources(results):
             for finding in result.get("findings", []):
                 normalized = self._normalize_finding(finding, result)
-                key = (normalized["category"], normalized["image_ref"], normalized["description"])
+                key = (
+                    normalized["category"],
+                    normalized["image_ref"],
+                    normalized["description"],
+                )
                 old = merged.get(key)
-                if old is None or SEVERITY_ORDER[normalized["severity"]] > SEVERITY_ORDER[old["severity"]]:
+                if (
+                    old is None
+                    or SEVERITY_ORDER[normalized["severity"]]
+                    > SEVERITY_ORDER[old["severity"]]
+                ):
                     merged[key] = normalized
-        return sorted(merged.values(), key=lambda item: (-SEVERITY_ORDER[item["severity"]], item["image_ref"], item["category"]))
+        return sorted(
+            merged.values(),
+            key=lambda item: (
+                -SEVERITY_ORDER[item["severity"]],
+                item["image_ref"],
+                item["category"],
+            ),
+        )
 
     @staticmethod
-    def _normalize_finding(finding: dict[str, Any], result: dict[str, Any]) -> dict[str, Any]:
+    # 规范化单条发现。
+    def _normalize_finding(
+        finding: dict[str, Any], result: dict[str, Any]
+    ) -> dict[str, Any]:
         severity = finding.get("severity", "low")
         if severity not in PENALTIES:
             severity = "low"
@@ -95,10 +112,13 @@ class EvidenceSynthesizer:
         return {
             "category": str(finding.get("category", "unclassified")),
             "severity": severity,
-            "description": str(finding.get("description", result.get("raw_text", "无文字结果"))),
+            "description": str(
+                finding.get("description", result.get("raw_text", "无文字结果"))
+            ),
             "image_ref": str(image_ref),
         }
 
+    # 合并合规结果并处理冲突。
     def _merge_compliance(self, results: list[dict[str, Any]]) -> list[dict[str, Any]]:
         grouped: dict[str, list[tuple[str, str, str]]] = defaultdict(list)
         for result in self._iter_result_sources(results):
@@ -117,7 +137,9 @@ class EvidenceSynthesizer:
             joined_evidence = " | ".join(text for _, text, _ in observations)
             if "fail" in statuses and "pass" in statuses:
                 status = "unclear"
-                evidence = "检测到 Worker 证据冲突：" + " | ".join(f"{worker_ref}: {text}" for _, text, worker_ref in observations)
+                evidence = "检测到 Worker 证据冲突：" + " | ".join(
+                    f"{worker_ref}: {text}" for _, text, worker_ref in observations
+                )
             elif "fail" in statuses:
                 status = "fail"
                 evidence = joined_evidence
@@ -131,15 +153,24 @@ class EvidenceSynthesizer:
         return merged
 
     @staticmethod
-    def _recommendations(findings: list[dict[str, Any]], compliance: list[dict[str, Any]]) -> list[str]:
+    # 根据发现和合规状态生成建议。
+    def _recommendations(
+        findings: list[dict[str, Any]], compliance: list[dict[str, Any]]
+    ) -> list[str]:
         recommendations: list[str] = []
         categories = {item["category"] for item in findings}
-        if "safety_obstruction" in categories or any(item["status"] == "fail" for item in compliance):
-            recommendations.append("立即清理消防出口和通道附近的障碍物，并由现场负责人复核。")
+        if "safety_obstruction" in categories or any(
+            item["status"] == "fail" for item in compliance
+        ):
+            recommendations.append(
+                "立即清理消防出口和通道附近的障碍物，并由现场负责人复核。"
+            )
         if "inventory" in categories:
             recommendations.append("对空货位进行补货复核，并将盘点结果与库存系统对账。")
         if "open_scene" in categories:
-            recommendations.append("该图片不属于明确零售证据，避免据此作库存或合规结论。")
+            recommendations.append(
+                "该图片不属于明确零售证据，避免据此作库存或合规结论。"
+            )
         if any(item["status"] == "unclear" for item in compliance):
             recommendations.append("对冲突或不清晰的合规项补拍近景，并安排人工复核。")
         if not recommendations:
@@ -147,6 +178,11 @@ class EvidenceSynthesizer:
         return recommendations
 
 
+# 返回带时区的 UTC ISO-8601 时间。
 def utc_now_iso() -> str:
-    """Return an explicit UTC ISO-8601 timestamp for reports and tests."""
-    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+    return (
+        datetime.now(timezone.utc)
+        .replace(microsecond=0)
+        .isoformat()
+        .replace("+00:00", "Z")
+    )

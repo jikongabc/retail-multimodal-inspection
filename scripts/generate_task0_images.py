@@ -18,6 +18,7 @@ except OSError:
     text_font = ImageFont.load_default()
 
 
+# 创建带标题的测试画布。
 def canvas(title):
     image = Image.new("RGB", (768, 512), "#f4f1e8")
     draw = ImageDraw.Draw(image)
@@ -25,6 +26,7 @@ def canvas(title):
     return image, draw
 
 
+# 绘制货架横梁。
 def shelves(draw):
     for y in (155, 305, 455):
         draw.rectangle((25, y, 743, y + 12), fill="#555555")
@@ -42,7 +44,9 @@ for row in range(3):
             outline="black",
             width=2,
         )
-        draw.text((x + 19, y + 26), f"P{row * 7 + col + 1}", fill="white", font=text_font)
+        draw.text(
+            (x + 19, y + 26), f"P{row * 7 + col + 1}", fill="white", font=text_font
+        )
 image.save(OUT / "01_inventory.jpg", quality=95)
 
 image, draw = canvas("SCENE 2 - SAFETY COMPLIANCE")
@@ -62,7 +66,12 @@ draw.text(
 image.save(OUT / "02_compliance.jpg", quality=95)
 
 image, draw = canvas("SCENE 3 - PRICE LABEL OCR")
-labels = [("MILK 1L", "$3.49"), ("BREAD", "$2.19"), ("COFFEE", "$8.99"), ("SALE", "20% OFF")]
+labels = [
+    ("MILK 1L", "$3.49"),
+    ("BREAD", "$2.19"),
+    ("COFFEE", "$8.99"),
+    ("SALE", "20% OFF"),
+]
 for index, (name, price) in enumerate(labels):
     y = 70 + index * 105
     draw.rounded_rectangle(

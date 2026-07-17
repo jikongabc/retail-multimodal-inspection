@@ -63,10 +63,12 @@ SCENES = [
 ]
 
 
+# 将显存字节数转换为 MB。
 def gpu_mb(value):
     return round(value / 1024**2, 1)
 
 
+# 执行单个场景并记录推理指标。
 def run_scene(model, processor, scene):
     image_path = IMAGE_DIR / scene["image"]
     image = Image.open(image_path).convert("RGB").resize((512, 512))
@@ -135,11 +137,16 @@ def run_scene(model, processor, scene):
     }
 
 
+# 加载模型并完成五个场景的基准测试。
 def main():
     if not torch.cuda.is_available():
         raise RuntimeError("CUDA is not available")
 
-    missing = [str(IMAGE_DIR / item["image"]) for item in SCENES if not (IMAGE_DIR / item["image"]).is_file()]
+    missing = [
+        str(IMAGE_DIR / item["image"])
+        for item in SCENES
+        if not (IMAGE_DIR / item["image"]).is_file()
+    ]
     if missing:
         raise FileNotFoundError(f"Missing scene images: {missing}")
 
@@ -155,7 +162,9 @@ def main():
     model.eval()
 
     load_vram_mb = gpu_mb(torch.cuda.memory_allocated())
-    print(f"Model loaded | GPU={torch.cuda.get_device_name(0)} | load VRAM={load_vram_mb} MB")
+    print(
+        f"Model loaded | GPU={torch.cuda.get_device_name(0)} | load VRAM={load_vram_mb} MB"
+    )
 
     results = []
     for index, scene in enumerate(SCENES, start=1):

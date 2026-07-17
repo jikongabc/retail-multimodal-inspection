@@ -1,4 +1,4 @@
-"""Download licensed real-photo fixtures from Wikimedia Commons."""
+# 下载 Wikimedia Commons 许可图片作为路由夹具。
 
 from __future__ import annotations
 
@@ -24,50 +24,64 @@ CATEGORIES = {
 COUNTS = {"a": 19, "b": 19, "c": 19, "d": 18}
 
 
+# 请求 Wikimedia Commons API。
 def api(params: dict) -> dict:
     query = urlencode({"action": "query", "format": "json", **params})
     request = Request(
         f"{API}?{query}",
-        headers={"User-Agent": "Task2FixtureCollector/1.0 (educational evaluation; contact local repo owner)"},
+        headers={
+            "User-Agent": "Task2FixtureCollector/1.0 (educational evaluation; contact local repo owner)"
+        },
     )
     with urlopen(request, timeout=40) as response:
         return json.load(response)
 
 
+# 获取分类下的可用图片及许可信息。
 def files_in_category(category: str, count: int) -> list[dict]:
     selected: list[dict] = []
     continuation: dict = {}
     seen: set[str] = set()
     while len(selected) < count:
-        payload = api({
-            "generator": "categorymembers",
-            "gcmtitle": category,
-            "gcmtype": "file",
-            "gcmlimit": "50",
-            "prop": "imageinfo",
-            "iiprop": "url|mime|extmetadata",
-            "iiurlwidth": "800",
-            **continuation,
-        })
+        payload = api(
+            {
+                "generator": "categorymembers",
+                "gcmtitle": category,
+                "gcmtype": "file",
+                "gcmlimit": "50",
+                "prop": "imageinfo",
+                "iiprop": "url|mime|extmetadata",
+                "iiurlwidth": "800",
+                **continuation,
+            }
+        )
         for page in payload.get("query", {}).get("pages", {}).values():
             title = page.get("title", "")
             info = (page.get("imageinfo") or [{}])[0]
             mime = info.get("mime", "")
-            if not mime.startswith("image/") or mime in {"image/svg+xml", "image/gif"} or title in seen:
+            if (
+                not mime.startswith("image/")
+                or mime in {"image/svg+xml", "image/gif"}
+                or title in seen
+            ):
                 continue
             metadata = info.get("extmetadata", {})
             license_name = metadata.get("LicenseShortName", {}).get("value", "").strip()
             if not license_name:
                 continue
-            selected.append({
-                "title": title,
-                "url": info.get("thumburl") or info.get("url"),
-                "original_url": info.get("url"),
-                "description_url": info.get("descriptionurl"),
-                "license": re.sub(r"<[^>]+>", "", license_name),
-                "author": re.sub(r"<[^>]+>", "", metadata.get("Artist", {}).get("value", "")).strip(),
-                "category": category,
-            })
+            selected.append(
+                {
+                    "title": title,
+                    "url": info.get("thumburl") or info.get("url"),
+                    "original_url": info.get("url"),
+                    "description_url": info.get("descriptionurl"),
+                    "license": re.sub(r"<[^>]+>", "", license_name),
+                    "author": re.sub(
+                        r"<[^>]+>", "", metadata.get("Artist", {}).get("value", "")
+                    ).strip(),
+                    "category": category,
+                }
+            )
             seen.add(title)
             if len(selected) == count:
                 return selected
@@ -75,10 +89,13 @@ def files_in_category(category: str, count: int) -> list[dict]:
         if not continuation:
             break
     if len(selected) < count:
-        raise RuntimeError(f"{category}: found {len(selected)} usable images, need {count}")
+        raise RuntimeError(
+            f"{category}: found {len(selected)} usable images, need {count}"
+        )
     return selected
 
 
+# 下载单张图片并处理限流重试。
 def download(url: str, target: Path) -> None:
     for attempt in range(6):
         try:
@@ -100,6 +117,7 @@ def download(url: str, target: Path) -> None:
             time.sleep(wait)
 
 
+# 下载全部图片并写入来源清单。
 def main() -> None:
     FIXTURES.mkdir(parents=True, exist_ok=True)
     manifest = []

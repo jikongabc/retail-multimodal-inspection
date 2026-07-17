@@ -2,7 +2,7 @@
 __pycache__
 fixtures/
 
-# Pipeline development helpers excluded from the assignment submission.
+# 排除不属于作业交付的开发辅助文件。
 submission/pipeline/__init__.py
 submission/pipeline/demos/index.json
 submission/pipeline/demos/render_screenshots.py
