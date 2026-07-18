@@ -50,7 +50,7 @@ demos:
 	$(PYTHON) -m submission.pipeline.demos.run_demos
 
 feedback:
-	$(PYTHON) -m submission.innovation.run_feedback_experiment
+	$(PYTHON) -m submission.innovation.run_feedback_experiment --reset-demo-state
 
 test:
 	$(PYTHON) -m unittest discover -v

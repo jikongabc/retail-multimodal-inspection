@@ -44,11 +44,13 @@ make fetch-fixtures
 make eval
 ```
 
-Task 4 数据飞轮：
+Task 4 环境反馈 + ReAct 数据飞轮：
 
 ```bash
 make feedback
 ```
+
+该命令运行“环境行动 → 反馈观察 → 结构化反思 → 自动样本生成 → sep-CMA-ES 自训练 → 固定测试门禁 → 发布/回滚”的完整闭环，并生成 `submission/innovation/training_data.jsonl`、`react_trace.jsonl` 和量化实验报告。演示会重建 Task4 本地状态；生产使用时应去掉 `--reset-demo-state`。
 
 基础 Demo 使用确定性 Mock Worker，报告会标记 `mock_mode=true`。设置 `OSTRAKON_BASE_URL` 后，Worker-A 可切换到 OpenAI 兼容的 Ostrakon 服务；也可分别设置 `WORKER_B_BASE_URL`、`WORKER_C_BASE_URL` 接入通用 VLM 和文本 LLM，否则 B/C 自动降级为 Mock。
 

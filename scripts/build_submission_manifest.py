@@ -1,4 +1,4 @@
-"""Create hashes for the files intended for a reproducible submission."""
+# 为可复现交付文件生成 SHA256 清单。
 
 from __future__ import annotations
 
@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "submission" / "MANIFEST.sha256"
 
 
+# 判断文件是否属于交付清单范围。
 def included(path: Path) -> bool:
     relative = path.relative_to(ROOT).as_posix()
     if relative == "submission/MANIFEST.sha256":
@@ -20,11 +21,7 @@ def included(path: Path) -> bool:
         return False
     if path.suffix == ".png" and "/fixtures/" in f"/{relative}/":
         return False
-    if relative in {
-        "submission/innovation/feedback.jsonl",
-        "submission/innovation/model_registry.jsonl",
-        "submission/innovation/router_incremental.npy",
-    }:
+    if relative == "submission/innovation/router_incremental.npy":
         return False
     return relative.startswith("submission/") or relative in {
         "README.md",
@@ -33,6 +30,7 @@ def included(path: Path) -> bool:
     }
 
 
+# 计算交付文件哈希并写入清单。
 def main() -> None:
     files = sorted(
         path for path in ROOT.rglob("*") if path.is_file() and included(path)
