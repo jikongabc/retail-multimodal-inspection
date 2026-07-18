@@ -64,6 +64,7 @@ def run_once(train, validation, test, seed: int, feature_config=None, generation
     router = MultimodalRouter(config=config, extractor=None)
     if feature_config is not None:
         from .feature_extractor import MultimodalFeatureExtractor
+
         router = MultimodalRouter(MultimodalFeatureExtractor(feature_config), config)
     router.fit(train)
     return {
@@ -76,35 +77,62 @@ def run_once(train, validation, test, seed: int, feature_config=None, generation
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate the multimodal router")
-    parser.add_argument("--data", default=str(Path(__file__).with_name("training_data.jsonl")))
+    parser.add_argument(
+        "--data", default=str(Path(__file__).with_name("training_data.jsonl"))
+    )
     parser.add_argument("--seeds", default="7,17,27")
     parser.add_argument("--generations", type=int, default=90)
     parser.add_argument("--skip-ablations", action="store_true")
-    parser.add_argument("--output", default=str(Path(__file__).with_name("eval_results.json")))
+    parser.add_argument(
+        "--output", default=str(Path(__file__).with_name("eval_results.json"))
+    )
     args = parser.parse_args()
     records = load_jsonl(args.data)
     validation_report = validate_records(records, args.data)
     train, validation, test = split_records(records)
     seeds = [int(value) for value in args.seeds.split(",") if value.strip()]
-    results = [run_once(train, validation, test, seed, generations=args.generations) for seed in seeds]
+    results = [
+        run_once(train, validation, test, seed, generations=args.generations)
+        for seed in seeds
+    ]
     output = {
-        "run_config": {"seeds": seeds, "generations": args.generations, "validation_per_class": 4},
+        "run_config": {
+            "seeds": seeds,
+            "generations": args.generations,
+            "validation_per_class": 4,
+        },
         "dataset": validation_report,
-        "split_sizes": {"train": len(train), "validation": len(validation), "test": len(test)},
+        "split_sizes": {
+            "train": len(train),
+            "validation": len(validation),
+            "test": len(test),
+        },
         "seeds": results,
     }
     if not args.skip_ablations:
         variants = {
-            "text_only": FeatureConfig(use_image=False, use_text=True, use_signals=False),
-            "image_only": FeatureConfig(use_image=True, use_text=False, use_signals=False),
-            "multimodal": FeatureConfig(use_image=True, use_text=True, use_signals=True),
-            "signals_only": FeatureConfig(use_image=False, use_text=False, use_signals=True),
+            "text_only": FeatureConfig(
+                use_image=False, use_text=True, use_signals=False
+            ),
+            "image_only": FeatureConfig(
+                use_image=True, use_text=False, use_signals=False
+            ),
+            "multimodal": FeatureConfig(
+                use_image=True, use_text=True, use_signals=True
+            ),
+            "signals_only": FeatureConfig(
+                use_image=False, use_text=False, use_signals=True
+            ),
         }
         output["ablations"] = {
-            name: run_once(train, validation, test, seeds[0], config, generations=args.generations)
+            name: run_once(
+                train, validation, test, seeds[0], config, generations=args.generations
+            )
             for name, config in variants.items()
         }
-    Path(args.output).write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    Path(args.output).write_text(
+        json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
     print(json.dumps(output, ensure_ascii=False, indent=2))
 
 

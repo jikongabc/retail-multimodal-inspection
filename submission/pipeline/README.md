@@ -28,7 +28,7 @@ python -m unittest discover -v
 
 ## Worker 模式
 
-设置 `OSTRAKON_BASE_URL` 后可使用 `--worker-mode real`。接口需要提供 OpenAI 兼容的 `/chat/completions` 路径。`OSTRAKON_MODEL` 和 `OSTRAKON_API_KEY` 为可选环境变量。真实模式将 Worker-A 接入 Ostrakon，Worker-B、Worker-C 保持 Mock 适配器。
+设置 `OSTRAKON_BASE_URL` 后可使用 `--worker-mode real`。接口需要提供 OpenAI 兼容的 `/chat/completions` 路径。`OSTRAKON_MODEL` 和 `OSTRAKON_API_KEY` 为可选环境变量。Worker-B/C 可分别使用 `WORKER_B_BASE_URL`、`WORKER_C_BASE_URL`、对应的 `*_MODEL` 和 `*_API_KEY` 接入真实服务；未配置时自动使用 Mock 适配器。
 
 ```bash
 export OSTRAKON_BASE_URL=http://127.0.0.1:8000/v1

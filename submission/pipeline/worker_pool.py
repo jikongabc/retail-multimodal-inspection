@@ -229,11 +229,19 @@ class MockWorker:
 # 提供 OpenAI 兼容接口的 Ostrakon Worker。
 class OpenAICompatibleOstrakonWorker:
     # 初始化 OpenAI 兼容接口参数。
-    def __init__(self, endpoint: str, model: str, api_key: str = "") -> None:
-        self.worker_id = "Worker-A"
+    def __init__(
+        self,
+        endpoint: str,
+        model: str,
+        api_key: str = "",
+        worker_id: str = "Worker-A",
+        role: str = "零售视觉",
+    ) -> None:
+        self.worker_id = worker_id
         self.endpoint = endpoint.rstrip("/") + "/chat/completions"
         self.model = model
         self.api_key = api_key
+        self.role = role
 
     # 调用 OpenAI 兼容视觉接口。
     def analyze(
@@ -243,7 +251,7 @@ class OpenAICompatibleOstrakonWorker:
         try:
             encoded = base64.b64encode(Path(image_path).read_bytes()).decode("ascii")
             prompt = (
-                f"你是零售巡检视觉 Worker。巡检类型：{inspection_type}。\n{query}\n"
+                f"你是{self.role} Worker。巡检类型：{inspection_type}。\n{query}\n"
                 "请只返回 JSON：{findings:[], compliance_items:[], summary:string, confidence:number}。"
             )
             payload = {
@@ -291,7 +299,11 @@ class OpenAICompatibleOstrakonWorker:
                 latency_ms=(time.perf_counter() - started) * 1000,
                 error=parsed.get("_parse_error"),
                 model_revision=self.model,
-                metadata={"request_id": request_id, "mock": False},
+                metadata={
+                    "request_id": request_id,
+                    "mock": False,
+                    "endpoint": self.endpoint,
+                },
             )
         except Exception as exc:
             return WorkerResult(
@@ -314,11 +326,21 @@ def _extract_json(text: str) -> dict[str, Any]:
     except json.JSONDecodeError:
         start, end = stripped.find("{"), stripped.rfind("}")
         if start < 0 or end <= start:
-            return {"findings": [], "compliance_items": [], "summary": stripped, "_parse_error": "worker output did not contain a JSON object"}
+            return {
+                "findings": [],
+                "compliance_items": [],
+                "summary": stripped,
+                "_parse_error": "worker output did not contain a JSON object",
+            }
         try:
             value = json.loads(stripped[start : end + 1])
         except json.JSONDecodeError:
-            return {"findings": [], "compliance_items": [], "summary": stripped, "_parse_error": "worker output contained invalid JSON"}
+            return {
+                "findings": [],
+                "compliance_items": [],
+                "summary": stripped,
+                "_parse_error": "worker output contained invalid JSON",
+            }
     return value if isinstance(value, dict) else {"summary": stripped}
 
 
@@ -341,14 +363,40 @@ class WorkerPool:
             if not endpoint:
                 raise ValueError("real mode requires OSTRAKON_BASE_URL")
             worker_a: Worker = OpenAICompatibleOstrakonWorker(
-                endpoint, model, os.getenv("OSTRAKON_API_KEY", "")
+                endpoint,
+                model,
+                os.getenv("OSTRAKON_API_KEY", ""),
+                "Worker-A",
+                "零售视觉专长",
             )
+            worker_b: Worker = MockWorker("Worker-B", profiles)
+            worker_c: Worker = MockWorker("Worker-C", profiles)
+            worker_b_endpoint = os.getenv("WORKER_B_BASE_URL")
+            worker_c_endpoint = os.getenv("WORKER_C_BASE_URL")
+            if worker_b_endpoint:
+                worker_b = OpenAICompatibleOstrakonWorker(
+                    worker_b_endpoint,
+                    os.getenv("WORKER_B_MODEL", "generic-vlm"),
+                    os.getenv("WORKER_B_API_KEY", ""),
+                    "Worker-B",
+                    "通用视觉理解",
+                )
+            if worker_c_endpoint:
+                worker_c = OpenAICompatibleOstrakonWorker(
+                    worker_c_endpoint,
+                    os.getenv("WORKER_C_MODEL", "text-llm"),
+                    os.getenv("WORKER_C_API_KEY", ""),
+                    "Worker-C",
+                    "文本报告与逻辑分析",
+                )
         else:
             worker_a = MockWorker("Worker-A", profiles)
+            worker_b = MockWorker("Worker-B", profiles)
+            worker_c = MockWorker("Worker-C", profiles)
         self.workers: dict[str, Worker] = {
             "Worker-A": worker_a,
-            "Worker-B": MockWorker("Worker-B", profiles),
-            "Worker-C": MockWorker("Worker-C", profiles),
+            "Worker-B": worker_b,
+            "Worker-C": worker_c,
         }
 
     # 执行指定 Worker 或 D 的并行策略。

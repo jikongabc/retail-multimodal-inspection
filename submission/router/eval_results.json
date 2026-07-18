@@ -99,6 +99,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
+              "support": 4
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             2,
@@ -187,7 +217,36 @@
           3,
           3
         ],
-        "gate_upgrades": 8,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 8,
+        "gate_change_rate": 0.5,
+        "gate_corrections": 4,
+        "gate_regressions": 3,
+        "gate_neutral_changes": 1,
+        "gate_net_benefit": 1,
+        "estimated_cost": {
+          "raw_mean_units": 1.125,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 9,
           "intent_confidence_override": 4,
@@ -345,6 +404,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             4,
@@ -431,7 +520,35 @@
           3,
           3
         ],
-        "gate_upgrades": 3,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 3,
+        "gate_change_rate": 0.2,
+        "gate_corrections": 3,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 3,
+        "estimated_cost": {
+          "raw_mean_units": 1.0667,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 7,
           "intent_confidence_override": 5,
@@ -520,9 +637,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.755,
-        "p95_ms": 13.51,
-        "max_ms": 14.789
+        "p50_ms": 8.955,
+        "p95_ms": 13.792,
+        "max_ms": 15.092
       }
     },
     {
@@ -587,6 +704,36 @@
               "precision": 0.5,
               "recall": 1.0,
               "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
               "support": 4
             }
           }
@@ -679,7 +826,36 @@
           3,
           3
         ],
-        "gate_upgrades": 6,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 6,
+        "gate_change_rate": 0.375,
+        "gate_corrections": 2,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -2,
+        "estimated_cost": {
+          "raw_mean_units": 1.3125,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 8,
           "low_margin": 5,
@@ -837,6 +1013,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             3,
@@ -923,7 +1129,35 @@
           3,
           3
         ],
-        "gate_upgrades": 3,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 3,
+        "gate_change_rate": 0.2,
+        "gate_corrections": 3,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 3,
+        "estimated_cost": {
+          "raw_mean_units": 1.2667,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 6,
           "intent_confidence_override": 4,
@@ -1012,9 +1246,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.712,
-        "p95_ms": 13.17,
-        "max_ms": 14.264
+        "p50_ms": 9.099,
+        "p95_ms": 13.844,
+        "max_ms": 14.788
       }
     },
     {
@@ -1079,6 +1313,36 @@
               "precision": 0.5,
               "recall": 1.0,
               "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
               "support": 4
             }
           }
@@ -1171,7 +1435,36 @@
           3,
           3
         ],
-        "gate_upgrades": 6,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 6,
+        "gate_change_rate": 0.375,
+        "gate_corrections": 2,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -2,
+        "estimated_cost": {
+          "raw_mean_units": 1.1875,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 11,
           "intent_confidence_override": 7,
@@ -1329,6 +1622,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             3,
@@ -1415,7 +1738,35 @@
           3,
           3
         ],
-        "gate_upgrades": 2,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 2,
+        "gate_change_rate": 0.1333,
+        "gate_corrections": 2,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 2,
+        "estimated_cost": {
+          "raw_mean_units": 1.2,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 9,
           "intent_confidence_override": 6,
@@ -1504,9 +1855,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.797,
-        "p95_ms": 13.182,
-        "max_ms": 13.897
+        "p50_ms": 8.926,
+        "p95_ms": 13.912,
+        "max_ms": 14.564
       }
     }
   ],
@@ -1573,6 +1924,36 @@
               "precision": 0.5,
               "recall": 1.0,
               "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
               "support": 4
             }
           }
@@ -1665,7 +2046,36 @@
           3,
           3
         ],
-        "gate_upgrades": 10,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 10,
+        "gate_change_rate": 0.625,
+        "gate_corrections": 6,
+        "gate_regressions": 3,
+        "gate_neutral_changes": 1,
+        "gate_net_benefit": 3,
+        "estimated_cost": {
+          "raw_mean_units": 1.1875,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 11,
           "low_margin": 3,
@@ -1823,6 +2233,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             3,
@@ -1909,7 +2349,35 @@
           3,
           3
         ],
-        "gate_upgrades": 7,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 7,
+        "gate_change_rate": 0.4667,
+        "gate_corrections": 7,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 7,
+        "estimated_cost": {
+          "raw_mean_units": 1.0667,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 9,
           "intent_confidence_override": 6,
@@ -1998,9 +2466,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.599,
-        "p95_ms": 13.507,
-        "max_ms": 14.132
+        "p50_ms": 9.185,
+        "p95_ms": 14.339,
+        "max_ms": 15.037
       }
     },
     "image_only": {
@@ -2040,6 +2508,36 @@
           }
         },
         "gated_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
           "accuracy": 0.6875,
           "macro_f1": 0.6705,
           "per_class": {
@@ -2157,7 +2655,36 @@
           3,
           3
         ],
-        "gate_upgrades": 15,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 15,
+        "gate_change_rate": 0.9375,
+        "gate_corrections": 10,
+        "gate_regressions": 3,
+        "gate_neutral_changes": 2,
+        "gate_net_benefit": 7,
+        "estimated_cost": {
+          "raw_mean_units": 1.0,
+          "gated_mean_units": 1.5625,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 15,
           "intent_confidence_override": 6,
@@ -2315,6 +2842,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             0,
@@ -2401,7 +2958,35 @@
           3,
           3
         ],
-        "gate_upgrades": 11,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 11,
+        "gate_change_rate": 0.7333,
+        "gate_corrections": 11,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 11,
+        "estimated_cost": {
+          "raw_mean_units": 1.0,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 4,
           "intent_confidence_override": 3,
@@ -2490,9 +3075,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.823,
-        "p95_ms": 13.922,
-        "max_ms": 14.752
+        "p50_ms": 9.007,
+        "p95_ms": 14.027,
+        "max_ms": 14.841
       }
     },
     "multimodal": {
@@ -2557,6 +3142,36 @@
               "precision": 0.5,
               "recall": 1.0,
               "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
               "support": 4
             }
           }
@@ -2649,7 +3264,36 @@
           3,
           3
         ],
-        "gate_upgrades": 8,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 8,
+        "gate_change_rate": 0.5,
+        "gate_corrections": 4,
+        "gate_regressions": 3,
+        "gate_neutral_changes": 1,
+        "gate_net_benefit": 1,
+        "estimated_cost": {
+          "raw_mean_units": 1.125,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 9,
           "intent_confidence_override": 4,
@@ -2807,6 +3451,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             4,
@@ -2893,7 +3567,35 @@
           3,
           3
         ],
-        "gate_upgrades": 3,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 3,
+        "gate_change_rate": 0.2,
+        "gate_corrections": 3,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 3,
+        "estimated_cost": {
+          "raw_mean_units": 1.0667,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 7,
           "intent_confidence_override": 5,
@@ -2982,9 +3684,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.973,
-        "p95_ms": 13.774,
-        "max_ms": 14.362
+        "p50_ms": 9.491,
+        "p95_ms": 14.164,
+        "max_ms": 15.258
       }
     },
     "signals_only": {
@@ -3049,6 +3751,36 @@
               "precision": 0.5,
               "recall": 1.0,
               "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
               "support": 4
             }
           }
@@ -3141,7 +3873,36 @@
           3,
           3
         ],
-        "gate_upgrades": 5,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 5,
+        "gate_change_rate": 0.3125,
+        "gate_corrections": 1,
+        "gate_regressions": 3,
+        "gate_neutral_changes": 1,
+        "gate_net_benefit": -2,
+        "estimated_cost": {
+          "raw_mean_units": 1.1875,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
@@ -3297,6 +4058,36 @@
             }
           }
         },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
         "raw_confusion_matrix": [
           [
             4,
@@ -3383,7 +4174,35 @@
           3,
           3
         ],
-        "gate_upgrades": 0,
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 0,
+        "gate_change_rate": 0.0,
+        "gate_corrections": 0,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 0,
+        "estimated_cost": {
+          "raw_mean_units": 1.2,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
         "gate_reasons": {
           "low_confidence": 2,
           "intent_confidence_override": 1,
@@ -3471,9 +4290,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.806,
-        "p95_ms": 13.733,
-        "max_ms": 14.948
+        "p50_ms": 9.124,
+        "p95_ms": 15.318,
+        "max_ms": 18.989
       }
     }
   }

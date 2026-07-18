@@ -127,6 +127,14 @@ class MultimodalFeatureExtractor:
         "high_risk": ("立即", "高风险", "严重", "安全事故", "消防出口", "high risk"),
         "visual": ("图片", "图像", "照片", "画面", "image", "photo"),
     }
+    SIGNAL_NAMES = (
+        "query_length",
+        "question_marks",
+        "plus_signs",
+        "structured_output",
+        "multi_image",
+        "uncertainty",
+    )
 
     # 初始化特征提取器和可选编码器。
     def __init__(self, config: FeatureConfig | None = None) -> None:
@@ -280,6 +288,11 @@ class MultimodalFeatureExtractor:
             ]
         )
         return np.asarray(flags, dtype=np.float32)
+
+    # 返回带名称的语义信号，避免调用方依赖数组位置。
+    def semantic_flag_map(self, query: str) -> dict[str, float]:
+        names = (*self.KEYWORDS.keys(), *self.SIGNAL_NAMES)
+        return dict(zip(names, self._semantic_flags(query), strict=True))
 
     # 提取并归一化图片与查询的联合特征。
     def extract(self, image_path: str | Path | None, query: str) -> np.ndarray:

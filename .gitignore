@@ -10,4 +10,11 @@ submission/router/fixtures/*.png
 !submission/router/fixtures/*.jpg
 !submission/router/fixtures/*.jpeg
 
-# Demo runners, manifests, inputs, summaries and tests are delivery files.
+# Keep runtime caches and checkpoints out of the delivery tree.
+submission/innovation/__pycache__/
+submission/innovation/router_incremental.npy
+
+# Local-only analysis and generated submission metadata.
+/submission/analysis/
+/submission/MANIFEST.sha256
+scripts/__pycache__/

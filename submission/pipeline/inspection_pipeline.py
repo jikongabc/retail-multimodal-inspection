@@ -153,6 +153,8 @@ class InspectionPipeline:
                     "gate_upgraded": decision["gate_upgraded"],
                     "gate_reasons": decision["gate_reasons"],
                     "query_intent": decision["query_intent"],
+                    "model_revision": worker_result.model_revision,
+                    "mock": worker_result.mock,
                     "execution_error": worker_result.error,
                 }
             )

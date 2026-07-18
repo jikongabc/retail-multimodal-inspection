@@ -55,6 +55,7 @@ class PipelineTests(unittest.TestCase):
             pipeline.inspect([FIXTURES / "a_00.png"], "未知类型")
         with self.assertRaises(ReportValidationError):
             from submission.pipeline.schemas import validate_report
+
             validate_report({"store_id": "x"})
 
     # 验证四种 Worker 策略均可调度。
@@ -62,7 +63,9 @@ class PipelineTests(unittest.TestCase):
         pipeline = self.make_pipeline()
         image = str((FIXTURES / "a_00.png").resolve())
         for worker in ("Worker-A", "Worker-B", "Worker-C", "Worker-D"):
-            result = pipeline.worker_pool.analyze(worker, image, "请分析", "inventory", "test")
+            result = pipeline.worker_pool.analyze(
+                worker, image, "请分析", "inventory", "test"
+            )
             self.assertEqual(result.worker_id, worker)
             self.assertGreaterEqual(result.latency_ms, 0)
 
@@ -78,10 +81,24 @@ class PipelineTests(unittest.TestCase):
             "mock": True,
             "metadata": {},
         }
-        passing = dict(base, compliance_items=[{"item": "消防通道", "status": "pass", "evidence": "无遮挡"}])
-        failing = dict(base, compliance_items=[{"item": "消防通道", "status": "fail", "evidence": "有障碍物"}])
-        pass_report = synthesizer.synthesize("store", "2026-07-18T00:00:00Z", [passing], [], "合规检查", "pass", True)
-        fail_report = synthesizer.synthesize("store", "2026-07-18T00:00:00Z", [failing], [], "合规检查", "fail", True)
+        passing = dict(
+            base,
+            compliance_items=[
+                {"item": "消防通道", "status": "pass", "evidence": "无遮挡"}
+            ],
+        )
+        failing = dict(
+            base,
+            compliance_items=[
+                {"item": "消防通道", "status": "fail", "evidence": "有障碍物"}
+            ],
+        )
+        pass_report = synthesizer.synthesize(
+            "store", "2026-07-18T00:00:00Z", [passing], [], "合规检查", "pass", True
+        )
+        fail_report = synthesizer.synthesize(
+            "store", "2026-07-18T00:00:00Z", [failing], [], "合规检查", "fail", True
+        )
         self.assertEqual(pass_report["overall_score"], 100)
         self.assertEqual(fail_report["overall_score"], 85)
 
@@ -98,15 +115,28 @@ class PipelineTests(unittest.TestCase):
         store.set("inspection:req:route", {"worker": "Worker-A"})
         store.set("inspection:req:result", {"ok": True})
         self.assertEqual(store.get("inspection:req:route")["worker"], "Worker-A")
-        self.assertEqual(store.keys("inspection:req"), ["inspection:req:result", "inspection:req:route"])
-        self.assertEqual(store.dump("inspection:req")["inspection:req:result"], {"ok": True})
+        self.assertEqual(
+            store.keys("inspection:req"),
+            ["inspection:req:result", "inspection:req:route"],
+        )
+        self.assertEqual(
+            store.dump("inspection:req")["inspection:req:result"], {"ok": True}
+        )
 
     # 验证 D 缺少来源 Worker 时返回明确错误。
     def test_worker_d_reports_missing_source_workers(self):
         pool = WorkerPool("mock")
         del pool.workers["Worker-B"]
-        with self.assertRaisesRegex(RuntimeError, "requires both Worker-A and Worker-B"):
-            pool.analyze("Worker-D", str((FIXTURES / "a_00.png").resolve()), "请分析", "inventory", "missing")
+        with self.assertRaisesRegex(
+            RuntimeError, "requires both Worker-A and Worker-B"
+        ):
+            pool.analyze(
+                "Worker-D",
+                str((FIXTURES / "a_00.png").resolve()),
+                "请分析",
+                "inventory",
+                "missing",
+            )
 
     # 验证时间字段必须为带时区的 ISO-8601 格式。
     def test_schema_rejects_invalid_or_timezone_free_timestamps(self):

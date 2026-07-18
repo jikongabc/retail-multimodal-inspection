@@ -15,9 +15,20 @@ class ModelRegistry:
     def _read(self) -> list[dict]:
         if not self.path.exists():
             return []
-        return [json.loads(line) for line in self.path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        return [
+            json.loads(line)
+            for line in self.path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
 
-    def register(self, version: str, checkpoint: str, metrics: dict, gate_passed: bool, parent: str | None = None) -> dict:
+    def register(
+        self,
+        version: str,
+        checkpoint: str,
+        metrics: dict,
+        gate_passed: bool,
+        parent: str | None = None,
+    ) -> dict:
         record = {
             "version": version,
             "checkpoint": str(checkpoint),
@@ -40,9 +51,13 @@ class ModelRegistry:
             raise ValueError(f"model {version} did not pass regression gate")
         for item in records:
             item["active"] = item["version"] == version
-        self.path.write_text("\n".join(json.dumps(item, ensure_ascii=False) for item in records) + "\n", encoding="utf-8")
+        self.path.write_text(
+            "\n".join(json.dumps(item, ensure_ascii=False) for item in records) + "\n",
+            encoding="utf-8",
+        )
         return target
 
     def active(self) -> dict | None:
-        return next((item for item in reversed(self._read()) if item.get("active")), None)
-
+        return next(
+            (item for item in reversed(self._read()) if item.get("active")), None
+        )

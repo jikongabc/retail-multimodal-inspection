@@ -83,7 +83,9 @@ def classification_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
         fn = int(np.sum((y_true == index) & (y_pred != index)))
         precision = tp / (tp + fp) if tp + fp else 0.0
         recall = tp / (tp + fn) if tp + fn else 0.0
-        f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+        f1 = (
+            2 * precision * recall / (precision + recall) if precision + recall else 0.0
+        )
         f1_values.append(f1)
         per_class[worker] = {
             "precision": round(precision, 4),
@@ -126,29 +128,31 @@ class MultimodalRouter:
     def _logits(self, X, flat):
         return X @ flat.reshape(len(WORKERS), -1).T
 
-    # 根据置信度、查询意图和场景执行路由门控。
-    def _gate(self, logits: np.ndarray, query: str, image_path=None) -> dict:
-        probs = np.exp(logits - logits.max())
-        probs = probs / probs.sum()
-        raw_idx = int(probs.argmax())
-        margin = float(np.sort(probs)[-1] - np.sort(probs)[-2])
-        flags = self.extractor._semantic_flags(query)
+    # 将按插入顺序返回的语义 flags 转为稳定的命名信号。
+    def _semantic_signals(self, query: str) -> dict[str, float | bool]:
+        values = self.extractor.semantic_flag_map(query)
+        keyword_names = self.extractor.KEYWORDS.keys()
+        return {
+            name: bool(value) if name in keyword_names else float(value)
+            for name, value in values.items()
+        }
+
+    # 提取不依赖模型 logits 的共享门控策略。
+    def _rule_policy(self, query: str, image_path=None) -> dict:
+        signals = self._semantic_signals(query)
         query_lower = query.lower()
         reasons = []
-        if flags[7]:
+        if signals["complex"]:
             reasons.append("complex_keyword")
-        if flags[8]:
+        if signals["high_risk"]:
             reasons.append("high_risk")
-        if flags[10] > 0.70:
+        if signals["query_length"] > 0.70:
             reasons.append("long_query")
-        if flags[14] > 0.0:
+        if signals["multi_image"]:
             reasons.append("multi_image")
-        if flags[15] > 0.0:
+        if signals["uncertainty"]:
             reasons.append("uncertain")
-        if float(probs[raw_idx]) < self.config.confidence_threshold:
-            reasons.append("low_confidence")
-        if margin < 0.08:
-            reasons.append("low_margin")
+
         explicit_text_only = any(
             token in query_lower
             for token in (
@@ -159,7 +163,7 @@ class MultimodalRouter:
                 "仅根据上游",
                 "不要做视觉判断",
             )
-        ) and bool(flags[4] or flags[13])
+        ) and bool(signals["report"] or signals["structured_output"])
         if explicit_text_only:
             reasons.append("explicit_text_only")
 
@@ -169,8 +173,8 @@ class MultimodalRouter:
             token in query_lower
             for token in ("不要数商品", "不要执行盘点", "不要判断库存", "不做库存")
         )
-        has_open_intent = bool(flags[6])
-        has_inventory_intent = bool(flags[0]) and not negated_inventory
+        has_open_intent = bool(signals["open_domain"])
+        has_inventory_intent = bool(signals["inventory"]) and not negated_inventory
         fact_only = "只描述可见事实" in query_lower
         if fact_only and not any(
             token in query_lower for token in ("合规", "检查是否", "判断是否")
@@ -194,7 +198,7 @@ class MultimodalRouter:
                 "提取",
             )
         )
-        if flags[7] or flags[8]:
+        if signals["complex"] or signals["high_risk"]:
             query_intent = "complex"
         elif explicit_text_only:
             query_intent = "report"
@@ -202,9 +206,14 @@ class MultimodalRouter:
             query_intent = "unknown"
         elif has_open_intent and not has_inventory_intent:
             query_intent = "open"
-        elif flags[4] and not has_inventory_intent:
+        elif signals["report"] and not has_inventory_intent:
             query_intent = "report"
-        elif has_inventory_intent or flags[1] or flags[2] or flags[3]:
+        elif (
+            has_inventory_intent
+            or signals["compliance"]
+            or signals["ocr"]
+            or signals["environment"]
+        ):
             query_intent = "retail_visual"
         else:
             query_intent = "unknown"
@@ -220,6 +229,31 @@ class MultimodalRouter:
         )
         if conflict:
             reasons.append("image_query_conflict")
+
+        return {
+            "signals": signals,
+            "gate_reasons": reasons,
+            "explicit_text_only": explicit_text_only,
+            "scene_hint": scene_hint,
+            "query_intent": query_intent,
+            "conflict": conflict,
+        }
+
+    # 根据置信度、查询意图和场景执行路由门控。
+    def _gate(self, logits: np.ndarray, query: str, image_path=None) -> dict:
+        probs = np.exp(logits - logits.max())
+        probs = probs / probs.sum()
+        raw_idx = int(probs.argmax())
+        margin = float(np.sort(probs)[-1] - np.sort(probs)[-2])
+        policy = self._rule_policy(query, image_path)
+        reasons = list(policy["gate_reasons"])
+        explicit_text_only = bool(policy["explicit_text_only"])
+        query_intent = policy["query_intent"]
+        conflict = bool(policy["conflict"])
+        if float(probs[raw_idx]) < self.config.confidence_threshold:
+            reasons.append("low_confidence")
+        if margin < 0.08:
+            reasons.append("low_margin")
 
         if explicit_text_only:
             final_idx = 2
@@ -251,7 +285,7 @@ class MultimodalRouter:
             "probs": probs,
             "margin": margin,
             "gate_reasons": reasons,
-            "scene_hint": scene_hint,
+            "scene_hint": policy["scene_hint"],
             "query_intent": query_intent,
         }
 
@@ -310,6 +344,9 @@ class MultimodalRouter:
             for row, r in zip(logits, records)
         ]
         gated_pred = np.asarray([x["final_idx"] for x in gated_info])
+        rule_pred = np.asarray(
+            [self._rule_only_worker(r["query"], r.get("image_path")) for r in records]
+        )
 
         # 构造混淆矩阵。
         def confusion(pred):
@@ -322,20 +359,61 @@ class MultimodalRouter:
         for x in gated_info:
             for reason in x["gate_reasons"]:
                 reasons[reason] = reasons.get(reason, 0) + 1
+        cost = np.asarray([2 if index == 3 else 1 for index in range(len(WORKERS))])
+        raw_cost = float(np.mean(cost[raw_pred])) if len(raw_pred) else 0.0
+        gated_cost = float(np.mean(cost[gated_pred])) if len(gated_pred) else 0.0
+        rule_cost = float(np.mean(cost[rule_pred])) if len(rule_pred) else 0.0
+        gate_corrections = int(np.sum((raw_pred != y) & (gated_pred == y)))
+        gate_regressions = int(np.sum((raw_pred == y) & (gated_pred != y)))
         return {
             "accuracy": float((gated_pred == y).mean()),
             "raw_accuracy": float((raw_pred == y).mean()),
             "gated_accuracy": float((gated_pred == y).mean()),
             "raw_metrics": classification_metrics(y, raw_pred),
             "gated_metrics": classification_metrics(y, gated_pred),
+            "rule_only_metrics": classification_metrics(y, rule_pred),
             "raw_confusion_matrix": confusion(raw_pred),
             "gated_confusion_matrix": confusion(gated_pred),
             "raw_predictions": raw_pred.tolist(),
             "gated_predictions": gated_pred.tolist(),
-            "gate_upgrades": int(np.sum(raw_pred != gated_pred)),
+            "rule_only_predictions": rule_pred.tolist(),
+            "gate_changes": int(np.sum(raw_pred != gated_pred)),
+            "gate_change_rate": round(float(np.mean(raw_pred != gated_pred)), 4)
+            if len(raw_pred)
+            else 0.0,
+            "gate_corrections": gate_corrections,
+            "gate_regressions": gate_regressions,
+            "gate_neutral_changes": int(
+                np.sum(raw_pred != gated_pred) - gate_corrections - gate_regressions
+            ),
+            "gate_net_benefit": gate_corrections - gate_regressions,
+            "estimated_cost": {
+                "raw_mean_units": round(raw_cost, 4),
+                "gated_mean_units": round(gated_cost, 4),
+                "rule_only_mean_units": round(rule_cost, 4),
+                "unit_definition": "single_worker=1, parallel_A_B=2",
+            },
             "gate_reasons": reasons,
             "scene_hints": [x["scene_hint"] for x in gated_info],
         }
+
+    # 提供不读取模型 logits 的规则基线，用于量化门控的独立贡献。
+    def _rule_only_worker(self, query: str, image_path=None) -> int:
+        """Apply the shared gate policy without model logits or probabilities."""
+        policy = self._rule_policy(query, image_path)
+        query_intent = policy["query_intent"]
+        if policy["explicit_text_only"]:
+            return WORKERS.index("Worker-C")
+        intent_to_worker = {
+            "open": WORKERS.index("Worker-B"),
+            "retail_visual": WORKERS.index("Worker-A"),
+            "report": WORKERS.index("Worker-C"),
+        }
+        if policy["conflict"] and query_intent == "unknown":
+            return WORKERS.index("Worker-D")
+        if query_intent in intent_to_worker:
+            return intent_to_worker[query_intent]
+        return WORKERS.index("Worker-D")
 
     # 评估独立标注的门控策略。
     def evaluate_gate_policy(self, records):
@@ -457,6 +535,7 @@ class MultimodalRouter:
     def load(self, path: str | Path) -> "MultimodalRouter":
         self.weights = np.load(path).astype(np.float32)
         return self
+
 
 # 读取 JSONL 数据并解析图片路径。
 def load_jsonl(path: str | Path):

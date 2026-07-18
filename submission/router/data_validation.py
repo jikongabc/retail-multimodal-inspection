@@ -12,12 +12,21 @@ from .mm_router import WORKERS, load_jsonl
 
 
 REQUIRED_FIELDS = {
-    "id", "image_path", "query", "label", "split", "label_reason",
-    "risk_level", "template_group", "source",
+    "id",
+    "image_path",
+    "query",
+    "label",
+    "split",
+    "label_reason",
+    "risk_level",
+    "template_group",
+    "source",
 }
 
 
-def validate_records(records: Iterable[dict], data_path: str | Path | None = None) -> dict:
+def validate_records(
+    records: Iterable[dict], data_path: str | Path | None = None
+) -> dict:
     """Return a report and raise ValueError for unsafe training data."""
     records = list(records)
     errors: list[str] = []
@@ -54,23 +63,47 @@ def validate_records(records: Iterable[dict], data_path: str | Path | None = Non
                 split_hashes.setdefault(split, set()).add(digest)
                 image_hash_to_path.setdefault(digest, str(resolved))
     overlap_images = {
-        f"{left}/{right}": sorted(split_images.get(left, set()) & split_images.get(right, set()))
-        for left, right in (("train", "validation"), ("train", "test"), ("validation", "test"))
+        f"{left}/{right}": sorted(
+            split_images.get(left, set()) & split_images.get(right, set())
+        )
+        for left, right in (
+            ("train", "validation"),
+            ("train", "test"),
+            ("validation", "test"),
+        )
         if split_images.get(left, set()) & split_images.get(right, set())
     }
     overlap_groups = {
-        f"{left}/{right}": sorted(split_groups.get(left, set()) & split_groups.get(right, set()))
-        for left, right in (("train", "validation"), ("train", "test"), ("validation", "test"))
+        f"{left}/{right}": sorted(
+            split_groups.get(left, set()) & split_groups.get(right, set())
+        )
+        for left, right in (
+            ("train", "validation"),
+            ("train", "test"),
+            ("validation", "test"),
+        )
         if split_groups.get(left, set()) & split_groups.get(right, set())
     }
     overlap_queries = {
-        f"{left}/{right}": sorted(split_queries.get(left, set()) & split_queries.get(right, set()))
-        for left, right in (("train", "validation"), ("train", "test"), ("validation", "test"))
+        f"{left}/{right}": sorted(
+            split_queries.get(left, set()) & split_queries.get(right, set())
+        )
+        for left, right in (
+            ("train", "validation"),
+            ("train", "test"),
+            ("validation", "test"),
+        )
         if split_queries.get(left, set()) & split_queries.get(right, set())
     }
     overlap_hashes = {
-        f"{left}/{right}": sorted(split_hashes.get(left, set()) & split_hashes.get(right, set()))
-        for left, right in (("train", "validation"), ("train", "test"), ("validation", "test"))
+        f"{left}/{right}": sorted(
+            split_hashes.get(left, set()) & split_hashes.get(right, set())
+        )
+        for left, right in (
+            ("train", "validation"),
+            ("train", "test"),
+            ("validation", "test"),
+        )
         if split_hashes.get(left, set()) & split_hashes.get(right, set())
     }
     if overlap_images:

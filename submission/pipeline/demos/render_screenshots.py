@@ -28,7 +28,7 @@ def main() -> None:
             f"<td>{item['latency_ms']:.3f}</td><td>{html.escape(', '.join(item['gate_reasons']))}</td></tr>"
             for item in report["routing_log"]
         )
-        page = f"""<!doctype html><meta charset='utf-8'><title>{html.escape(summary['title'])}</title>
+        page = f"""<!doctype html><meta charset='utf-8'><title>{html.escape(summary["title"])}</title>
 <style>
 body{{font-family:Arial,'Microsoft YaHei',sans-serif;background:#f5f7fb;color:#172033;margin:30px}}
 .card{{background:#fff;border:1px solid #dce2ee;border-radius:12px;padding:22px;margin:14px 0;box-shadow:0 2px 8px #17203312}}
@@ -36,17 +36,19 @@ h1{{margin:0 0 8px;color:#173b72}} h2{{color:#275da8}} .score{{font-size:32px;fo
 table{{border-collapse:collapse;width:100%}} th,td{{border-bottom:1px solid #e5e9f2;padding:8px;text-align:left;font-size:14px}}
 th{{background:#edf3fc}} pre{{white-space:pre-wrap;font-size:11px;line-height:1.35;max-height:560px;overflow:hidden}}
 .tag{{display:inline-block;background:#e8f1ff;color:#215b9a;border-radius:12px;padding:4px 10px;margin-right:8px}}
-</style><body><div class='card'><h1>{html.escape(summary['title'])}</h1>
-<span class='tag'>request_id: {html.escape(str(summary['request_id']))}</span>
-<span class='tag'>Mock</span><span class='score'>score {summary['overall_score']}</span></div>
+</style><body><div class='card'><h1>{html.escape(summary["title"])}</h1>
+<span class='tag'>request_id: {html.escape(str(summary["request_id"]))}</span>
+<span class='tag'>Mock</span><span class='score'>score {summary["overall_score"]}</span></div>
 <div class='card'><h2>Routing log</h2><table><tr><th>image</th><th>actual</th><th>expected</th><th>routing error</th><th>latency (ms)</th><th>gate reasons</th></tr>{route_rows}</table></div>
-<div class='card'><h2>Findings / compliance</h2><pre>{html.escape(json.dumps({'findings':report['findings'],'compliance_items':report['compliance_items'],'recommendations':report['recommendations']},ensure_ascii=False,indent=2))}</pre></div>
+<div class='card'><h2>Findings / compliance</h2><pre>{html.escape(json.dumps({"findings": report["findings"], "compliance_items": report["compliance_items"], "recommendations": report["recommendations"]}, ensure_ascii=False, indent=2))}</pre></div>
 <div class='card'><h2>Full output JSON</h2><pre>{html.escape(payload)}</pre></div></body>"""
         target = Path("/tmp") / f"task3-{scenario.name}.html"
         target.write_text(page, encoding="utf-8")
         chrome = shutil.which("google-chrome") or shutil.which("google-chrome-stable")
         if not chrome:
-            raise RuntimeError("google-chrome or google-chrome-stable is required to render screenshots")
+            raise RuntimeError(
+                "google-chrome or google-chrome-stable is required to render screenshots"
+            )
         screenshot = scenario / "screenshot.png"
         command = [
             chrome,
@@ -59,7 +61,12 @@ th{{background:#edf3fc}} pre{{white-space:pre-wrap;font-size:11px;line-height:1.
             target.as_uri(),
         ]
         try:
-            subprocess.run(command, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            subprocess.run(
+                command,
+                check=True,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
         except subprocess.CalledProcessError:
             if not screenshot.is_file() or screenshot.stat().st_size == 0:
                 raise

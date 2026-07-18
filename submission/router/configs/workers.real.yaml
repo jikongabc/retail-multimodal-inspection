@@ -1,5 +1,9 @@
 mode: real
 worker_a: openai_compatible_ostrakon
-worker_b: mock_fallback
-worker_c: mock_fallback
+worker_b: optional_openai_compatible
+worker_c: optional_openai_compatible
 worker_d: parallel_a_b
+
+# Documentation only: this YAML is not environment-variable interpolated.
+# worker_pool.py reads WORKER_B_BASE_URL / WORKER_C_BASE_URL at runtime;
+# when an endpoint is absent, the corresponding worker falls back to Mock.

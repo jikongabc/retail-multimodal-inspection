@@ -562,7 +562,11 @@ def label_metadata(worker: str, family_index: int, real_photo_mode: bool) -> dic
         "Worker-C": "任务核心是已有结果的文本汇总或逻辑分析",
         "Worker-D": "高风险、复合或需要 A/B 交叉验证的任务升级并行策略",
     }
-    risk = "high" if worker == "Worker-D" else ("medium" if worker == "Worker-A" else "low")
+    risk = (
+        "high"
+        if worker == "Worker-D"
+        else ("medium" if worker == "Worker-A" else "low")
+    )
     return {
         "label_reason": reasons[worker],
         "risk_level": risk,
@@ -603,15 +607,15 @@ def main() -> None:
                     i,
                 )
             record = {
-                    "id": f"{worker[-1]}-{i:02d}",
-                    "image_path": str(Path("fixtures") / image.name),
-                    "query": queries[i],
-                    "label": worker,
-                    "split": "train",
-                    "construction": "licensed_real_photo_train_wikimedia_commons"
-                    if real_photo_mode
-                    else "controlled_fixture_train_v3_diverse_synthetic_scene",
-                }
+                "id": f"{worker[-1]}-{i:02d}",
+                "image_path": str(Path("fixtures") / image.name),
+                "query": queries[i],
+                "label": worker,
+                "split": "train",
+                "construction": "licensed_real_photo_train_wikimedia_commons"
+                if real_photo_mode
+                else "controlled_fixture_train_v3_diverse_synthetic_scene",
+            }
             record.update(label_metadata(worker, i // 3, real_photo_mode))
             rows.append(record)
     validation = []
@@ -645,16 +649,16 @@ def main() -> None:
                     100 + i,
                 )
             record = {
-                    "id": f"{worker[-1]}-test-{i:02d}",
-                    "image_path": str(Path("fixtures") / image.name),
-                    "query": query,
-                    "label": worker,
-                    "expected_action": "explicit_d" if worker == "Worker-D" else "none",
-                    "split": "test",
-                    "construction": "licensed_real_photo_test_wikimedia_commons_unseen_query"
-                    if real_photo_mode
-                    else "controlled_fixture_test_v3_unseen_query_diverse_synthetic_scene",
-                }
+                "id": f"{worker[-1]}-test-{i:02d}",
+                "image_path": str(Path("fixtures") / image.name),
+                "query": query,
+                "label": worker,
+                "expected_action": "explicit_d" if worker == "Worker-D" else "none",
+                "split": "test",
+                "construction": "licensed_real_photo_test_wikimedia_commons_unseen_query"
+                if real_photo_mode
+                else "controlled_fixture_test_v3_unseen_query_diverse_synthetic_scene",
+            }
             record.update(label_metadata(worker, 20 + i, real_photo_mode))
             test.append(record)
     with open(ROOT / "training_data.jsonl", "w", encoding="utf-8") as f:

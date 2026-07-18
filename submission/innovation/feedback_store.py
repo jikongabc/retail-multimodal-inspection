@@ -36,12 +36,19 @@ class FeedbackStore:
     def _read(self) -> list[dict]:
         if not self.path.exists():
             return []
-        return [json.loads(line) for line in self.path.read_text(encoding="utf-8").splitlines() if line.strip()]
+        return [
+            json.loads(line)
+            for line in self.path.read_text(encoding="utf-8").splitlines()
+            if line.strip()
+        ]
 
     def add(self, feedback: Feedback) -> bool:
         if not feedback.request_id or not feedback.image_path or not feedback.query:
             raise ValueError("request_id, image_path and query are required")
-        if feedback.original_worker not in WORKERS or feedback.correct_worker not in WORKERS:
+        if (
+            feedback.original_worker not in WORKERS
+            or feedback.correct_worker not in WORKERS
+        ):
             raise ValueError(f"workers must be one of {WORKERS}")
         if not feedback.reason.strip():
             raise ValueError("feedback reason is required")
@@ -66,22 +73,28 @@ class FeedbackStore:
             raise ValueError("minimum must be positive")
         return len(self.training_records()) >= minimum
 
-    def training_records(self, include_status: tuple[str, ...] = ("approved", "pending_review")) -> list[dict]:
+    def training_records(
+        self, include_status: tuple[str, ...] = ("approved", "pending_review")
+    ) -> list[dict]:
         """Convert feedback into router records without changing the fixed test set."""
         output = []
         for item in self._read():
             if item.get("status") not in include_status:
                 continue
-            output.append({
-                "id": f"feedback-{item['fingerprint'][:12]}",
-                "image_path": item["image_path"],
-                "query": item["query"],
-                "label": item["correct_worker"],
-                "split": "train",
-                "label_reason": item["reason"],
-                "risk_level": "high" if item["correct_worker"] == "Worker-D" else "medium",
-                "template_group": f"feedback_{item['fingerprint'][:8]}",
-                "source": "user_feedback",
-                "feedback_fingerprint": item["fingerprint"],
-            })
+            output.append(
+                {
+                    "id": f"feedback-{item['fingerprint'][:12]}",
+                    "image_path": item["image_path"],
+                    "query": item["query"],
+                    "label": item["correct_worker"],
+                    "split": "train",
+                    "label_reason": item["reason"],
+                    "risk_level": "high"
+                    if item["correct_worker"] == "Worker-D"
+                    else "medium",
+                    "template_group": f"feedback_{item['fingerprint'][:8]}",
+                    "source": "user_feedback",
+                    "feedback_fingerprint": item["fingerprint"],
+                }
+            )
         return output
