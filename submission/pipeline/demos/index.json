@@ -1,0 +1,17 @@
+[
+  {
+    "name": "scenario_1_inventory",
+    "output": "submission/pipeline/demos/scenario_1_inventory/output.json",
+    "score": 85
+  },
+  {
+    "name": "scenario_2_compliance",
+    "output": "submission/pipeline/demos/scenario_2_compliance/output.json",
+    "score": 45
+  },
+  {
+    "name": "scenario_3_comprehensive",
+    "output": "submission/pipeline/demos/scenario_3_comprehensive/output.json",
+    "score": 55
+  }
+]

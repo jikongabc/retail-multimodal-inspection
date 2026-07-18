@@ -1,14 +1,14 @@
 {
   "store_id": "store-safety-002",
-  "inspection_time": "2026-07-17T17:45:55Z",
+  "inspection_time": "2026-07-18T04:19:57Z",
   "overall_score": 45,
   "routing_log": [
     {
       "image": "exit_obstructed.png",
       "worker": "Worker-D",
-      "latency_ms": 11.103,
-      "route_latency_ms": 10.406,
-      "worker_latency_ms": 0.697,
+      "latency_ms": 11.076,
+      "route_latency_ms": 10.466,
+      "worker_latency_ms": 0.61,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.6929,
@@ -26,9 +26,9 @@
     {
       "image": "fire_exit.png",
       "worker": "Worker-D",
-      "latency_ms": 11.115,
-      "route_latency_ms": 10.476,
-      "worker_latency_ms": 0.639,
+      "latency_ms": 10.96,
+      "route_latency_ms": 10.382,
+      "worker_latency_ms": 0.578,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.7117,

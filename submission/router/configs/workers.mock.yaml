@@ -1,0 +1,5 @@
+mode: mock
+worker_a: deterministic_mock
+worker_b: deterministic_mock
+worker_c: deterministic_mock
+worker_d: parallel_a_b

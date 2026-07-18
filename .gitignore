@@ -1,12 +1,13 @@
 /docs/
-__pycache__
-fixtures/
+__pycache__/
+*.pyc
+.ruff_cache/
 
-# 排除不属于作业交付的开发辅助文件。
-submission/pipeline/__init__.py
-submission/pipeline/demos/index.json
-submission/pipeline/demos/render_screenshots.py
-submission/pipeline/demos/run_demos.py
-submission/pipeline/demos/scenario_*/input.json
-submission/pipeline/demos/scenario_*/summary.json
-submission/pipeline/tests/
+# Keep the real route fixtures self-contained, but do not commit generated PNG duplicates.
+fixtures/
+!submission/router/fixtures/
+submission/router/fixtures/*.png
+!submission/router/fixtures/*.jpg
+!submission/router/fixtures/*.jpeg
+
+# Demo runners, manifests, inputs, summaries and tests are delivery files.

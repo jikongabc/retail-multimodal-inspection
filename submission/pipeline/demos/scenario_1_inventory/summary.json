@@ -1,0 +1,43 @@
+{
+  "title": "场景 1：货架盘点",
+  "request_id": "scenario_1_inventory",
+  "overall_score": 85,
+  "workers": [
+    "Worker-A",
+    "Worker-A",
+    "Worker-A"
+  ],
+  "expected_workers": {
+    "shelf_front.png": "Worker-A",
+    "shelf_oblique.png": "Worker-A",
+    "shelf_sparse.png": "Worker-A"
+  },
+  "findings": [
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_front.png"
+    },
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_oblique.png"
+    },
+    {
+      "category": "inventory",
+      "severity": "low",
+      "description": "货架存在商品陈列，发现少量空货位，建议补货复核。",
+      "image_ref": "shelf_sparse.png"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "货架陈列可见性",
+      "status": "pass",
+      "evidence": "shelf_front.png 中可见货架层和商品面。 | shelf_oblique.png 中可见货架层和商品面。 | shelf_sparse.png 中可见货架层和商品面。"
+    }
+  ],
+  "error_case": null
+}

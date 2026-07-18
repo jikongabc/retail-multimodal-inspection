@@ -1,0 +1,14 @@
+{
+  "store_id": "store-mixed-003",
+  "inspection_type": "综合评估",
+  "images": [
+    "submission/pipeline/demos/scenario_3_comprehensive/open_domain.png",
+    "submission/pipeline/demos/scenario_3_comprehensive/shelf_hybrid.png",
+    "submission/pipeline/demos/scenario_3_comprehensive/conflict_exit.png"
+  ],
+  "expected_workers": {
+    "open_domain.png": "Worker-B",
+    "shelf_hybrid.png": "Worker-D",
+    "conflict_exit.png": "Worker-D"
+  }
+}

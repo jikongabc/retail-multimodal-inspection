@@ -1,0 +1,14 @@
+{
+  "store_id": "store-shelf-001",
+  "inspection_type": "商品盘点",
+  "images": [
+    "submission/pipeline/demos/scenario_1_inventory/shelf_front.png",
+    "submission/pipeline/demos/scenario_1_inventory/shelf_oblique.png",
+    "submission/pipeline/demos/scenario_1_inventory/shelf_sparse.png"
+  ],
+  "expected_workers": {
+    "shelf_front.png": "Worker-A",
+    "shelf_oblique.png": "Worker-A",
+    "shelf_sparse.png": "Worker-A"
+  }
+}

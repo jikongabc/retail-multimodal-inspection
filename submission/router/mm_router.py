@@ -73,6 +73,31 @@ class SepCMAES:
         return best_x, best_score, history
 
 
+def classification_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
+    """Return accuracy and macro/per-class metrics without extra dependencies."""
+    per_class = {}
+    f1_values = []
+    for index, worker in enumerate(WORKERS):
+        tp = int(np.sum((y_true == index) & (y_pred == index)))
+        fp = int(np.sum((y_true != index) & (y_pred == index)))
+        fn = int(np.sum((y_true == index) & (y_pred != index)))
+        precision = tp / (tp + fp) if tp + fp else 0.0
+        recall = tp / (tp + fn) if tp + fn else 0.0
+        f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0.0
+        f1_values.append(f1)
+        per_class[worker] = {
+            "precision": round(precision, 4),
+            "recall": round(recall, 4),
+            "f1": round(f1, 4),
+            "support": int(np.sum(y_true == index)),
+        }
+    return {
+        "accuracy": round(float(np.mean(y_true == y_pred)), 4) if len(y_true) else 0.0,
+        "macro_f1": round(float(np.mean(f1_values)), 4) if f1_values else 0.0,
+        "per_class": per_class,
+    }
+
+
 # 路由到四个 Worker 并支持 D 的并行升级。
 class MultimodalRouter:
     # 初始化路由器。
@@ -301,6 +326,8 @@ class MultimodalRouter:
             "accuracy": float((gated_pred == y).mean()),
             "raw_accuracy": float((raw_pred == y).mean()),
             "gated_accuracy": float((gated_pred == y).mean()),
+            "raw_metrics": classification_metrics(y, raw_pred),
+            "gated_metrics": classification_metrics(y, gated_pred),
             "raw_confusion_matrix": confusion(raw_pred),
             "gated_confusion_matrix": confusion(gated_pred),
             "raw_predictions": raw_pred.tolist(),
@@ -430,7 +457,6 @@ class MultimodalRouter:
     def load(self, path: str | Path) -> "MultimodalRouter":
         self.weights = np.load(path).astype(np.float32)
         return self
-
 
 # 读取 JSONL 数据并解析图片路径。
 def load_jsonl(path: str | Path):

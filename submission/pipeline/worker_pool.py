@@ -289,6 +289,7 @@ class OpenAICompatibleOstrakonWorker:
                 compliance_items=parsed.get("compliance_items", []),
                 confidence=float(parsed.get("confidence", 0.5)),
                 latency_ms=(time.perf_counter() - started) * 1000,
+                error=parsed.get("_parse_error"),
                 model_revision=self.model,
                 metadata={"request_id": request_id, "mock": False},
             )
@@ -313,11 +314,11 @@ def _extract_json(text: str) -> dict[str, Any]:
     except json.JSONDecodeError:
         start, end = stripped.find("{"), stripped.rfind("}")
         if start < 0 or end <= start:
-            return {"findings": [], "compliance_items": [], "summary": stripped}
+            return {"findings": [], "compliance_items": [], "summary": stripped, "_parse_error": "worker output did not contain a JSON object"}
         try:
             value = json.loads(stripped[start : end + 1])
         except json.JSONDecodeError:
-            return {"findings": [], "compliance_items": [], "summary": stripped}
+            return {"findings": [], "compliance_items": [], "summary": stripped, "_parse_error": "worker output contained invalid JSON"}
     return value if isinstance(value, dict) else {"summary": stripped}
 
 

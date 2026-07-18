@@ -1,0 +1,5 @@
+mode: real
+worker_a: openai_compatible_ostrakon
+worker_b: mock_fallback
+worker_c: mock_fallback
+worker_d: parallel_a_b

@@ -1,0 +1,35 @@
+{
+  "title": "场景 2：高风险合规巡检",
+  "request_id": "scenario_2_compliance",
+  "overall_score": 45,
+  "workers": [
+    "Worker-D",
+    "Worker-D"
+  ],
+  "expected_workers": {
+    "exit_obstructed.png": "Worker-D",
+    "fire_exit.png": "Worker-D"
+  },
+  "findings": [
+    {
+      "category": "safety_obstruction",
+      "severity": "high",
+      "description": "消防出口/通道附近出现疑似障碍物。",
+      "image_ref": "exit_obstructed.png"
+    },
+    {
+      "category": "safety_obstruction",
+      "severity": "high",
+      "description": "消防出口/通道附近出现疑似障碍物。",
+      "image_ref": "fire_exit.png"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "消防通道无遮挡",
+      "status": "fail",
+      "evidence": "exit_obstructed.png 中出口前方可见障碍物或警示区域被占用。 | fire_exit.png 中出口前方可见障碍物或警示区域被占用。"
+    }
+  ],
+  "error_case": null
+}

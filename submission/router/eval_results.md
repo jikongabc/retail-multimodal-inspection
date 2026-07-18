@@ -4,15 +4,17 @@
 
 | 项目 | 值 |
 |---|---:|
-| 总样本 | 75 |
-| 训练集 / 测试集 | 60 / 15 |
+| 总样本 | 91 |
+| 训练集 / 验证集 / 测试集 | 60 / 16 / 15 |
 | Worker 类别 | A / B / C / D |
 | 路由头参数量 | 708 |
 | 优化器 | sep-CMA-ES，seed=7，90 generations，population=18 |
 | 特征后端 | gamma-offline（图像统计 + 哈希文本 + 任务信号；模态权重 0.10/0.70/0.20） |
 | 测试日期 | 2026-07-17（修订版） |
 
-测试集使用 4/4/4/3 条分别对应 A/B/C/D，未参与训练；训练查询和测试查询不重叠。75 张图片来自 Wikimedia Commons 的真实照片，来源、作者、文件页和许可保存在 `real_fixture_sources.jsonl`。另有 12 条完全独立的 hard-negative 边界集，不参与训练。准确率分别报告裸 logits（raw）与执行在线 gate 后（gated），不把门控结果混入 raw 指标。
+测试集使用 4/4/4/3 条分别对应 A/B/C/D，验证集使用每类 4 条独立生成夹具，均未参与训练；训练、验证、测试的图片内容、查询和 template_group 均做泄漏检查。75 条 train/test 图片来自 Wikimedia Commons 的真实照片，16 条 validation 图片为可复现的独立控制夹具；来源、作者、文件页和许可保存在 `real_fixture_sources.jsonl`。另有 12 条完全独立的 hard-negative 边界集，不参与训练。准确率分别报告裸 logits（raw）与执行在线 gate 后（gated），不把门控结果混入 raw 指标。
+
+新增 `python -m submission.router.evaluate` 作为可重复评估入口：从原 train split 隔离每类 4 条 validation，固定 test 只在最后评估；默认运行 seed `7,17,27`，并输出 macro-F1、每类 precision/recall/F1、p50/p95 和特征消融。完整机器可读结果见 `eval_results.json`。
 
 ## 2. Worker 选择准确率与混淆矩阵
 
@@ -26,6 +28,8 @@ Worker-D      0    0    0    3
 ```
 
 Worker 选择准确率：**raw 13/15 = 86.7%，gated 15/15 = 100.0%**。
+
+当前 `eval_results.json`（seed=7/17/27、generations=30）的纯 logits test accuracy 为 80.0% / 80.0% / 86.7%，gated accuracy 均为 100%；因此 100% 不能解释为纯 sep-CMA-ES 路由头能力，而是“路由头 + 查询意图门控”的系统结果。
 
 Clean test 的 `gate_upgrades=2`；两条 raw 错误由明确查询意图优先规则修正。训练 objective、评估和部署使用同一个 `_gate()`。
 

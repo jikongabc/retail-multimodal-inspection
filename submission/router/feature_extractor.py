@@ -22,6 +22,9 @@ class FeatureConfig:
     image_dim: int = 64
     text_dim: int = 96
     use_clip: bool = False
+    use_image: bool = True
+    use_text: bool = True
+    use_signals: bool = True
 
     @property
     # 返回拼接后的特征维度。
@@ -312,6 +315,12 @@ class MultimodalFeatureExtractor:
         image_vec = self._resize_projection(image_vec, self.config.image_dim)
         text_vec = self._resize_projection(text_vec, self.config.text_dim)
         flags = self._resize_projection(flags, 16)
+        if not self.config.use_image:
+            image_vec = np.zeros_like(image_vec)
+        if not self.config.use_text:
+            text_vec = np.zeros_like(text_vec)
+        if not self.config.use_signals:
+            flags = np.zeros_like(flags)
         vec = np.concatenate([0.10 * image_vec, 0.70 * text_vec, 0.20 * flags]).astype(
             np.float32
         )

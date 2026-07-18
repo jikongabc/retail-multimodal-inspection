@@ -1,0 +1,12 @@
+{
+  "store_id": "store-safety-002",
+  "inspection_type": "合规检查",
+  "images": [
+    "submission/pipeline/demos/scenario_2_compliance/exit_obstructed.png",
+    "submission/pipeline/demos/scenario_2_compliance/fire_exit.png"
+  ],
+  "expected_workers": {
+    "exit_obstructed.png": "Worker-D",
+    "fire_exit.png": "Worker-D"
+  }
+}

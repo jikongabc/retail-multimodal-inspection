@@ -1,0 +1,6 @@
+seed: 7
+population: 18
+generations: 90
+confidence_threshold: 0.56
+feature_backend: gamma-offline
+validation_per_class: 4

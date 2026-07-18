@@ -444,6 +444,33 @@ TEST_QUERIES = {
     ],
 }
 
+VALIDATION_QUERIES = {
+    "Worker-A": [
+        "请核对货架每一层的商品面和空缺位置。",
+        "从图像证据列出需要补货的陈列位。",
+        "请完成一份不带总结的货架细节盘点。",
+        "判断商品陈列是否存在明显断档。",
+    ],
+    "Worker-B": [
+        "请描述图片中的主体、背景和空间关系。",
+        "这张照片属于什么开放域场景？",
+        "只回答图像中直接可见的对象和动作。",
+        "请做通用图片理解，不输出零售判断。",
+    ],
+    "Worker-C": [
+        "请把已有巡检字段整理成简短摘要。",
+        "仅依据上游事实生成一份整改清单。",
+        "比较给定记录并归纳主要异常。",
+        "将结构化结果改写成管理层可读的结论。",
+    ],
+    "Worker-D": [
+        "请对多项风险进行 A/B 交叉验证。",
+        "高风险图片需要并行专家复核后再下结论。",
+        "综合库存与安全证据并保留不确定项。",
+        "复杂巡检必须输出可追溯的交叉证据。",
+    ],
+}
+
 HARD_NEGATIVES = [
     # 写入独立的 Worker 标签和门控策略标签。
     (
@@ -527,6 +554,24 @@ HARD_NEGATIVES = [
 ]
 
 
+def label_metadata(worker: str, family_index: int, real_photo_mode: bool) -> dict:
+    """Attach auditable labeling metadata to every generated route record."""
+    reasons = {
+        "Worker-A": "零售细粒度视觉任务由领域 Worker-A 处理",
+        "Worker-B": "开放域视觉理解不应套用零售先验",
+        "Worker-C": "任务核心是已有结果的文本汇总或逻辑分析",
+        "Worker-D": "高风险、复合或需要 A/B 交叉验证的任务升级并行策略",
+    }
+    risk = "high" if worker == "Worker-D" else ("medium" if worker == "Worker-A" else "low")
+    return {
+        "label_reason": reasons[worker],
+        "risk_level": risk,
+        # The group is a semantic query-family identifier, not a split-derived name.
+        "template_group": f"{worker[-1].lower()}_qf_{family_index:02d}",
+        "source": "public_licensed_photo" if real_photo_mode else "controlled_fixture",
+    }
+
+
 # 优先查找真实图片，不存在时返回合成图片路径。
 def fixture_file(stem: str) -> Path:
     for suffix in (".jpg", ".jpeg", ".png"):
@@ -557,8 +602,7 @@ def main() -> None:
                     "safety" if worker == "Worker-D" and i % 3 == 0 else kinds[worker],
                     i,
                 )
-            rows.append(
-                {
+            record = {
                     "id": f"{worker[-1]}-{i:02d}",
                     "image_path": str(Path("fixtures") / image.name),
                     "query": queries[i],
@@ -568,7 +612,27 @@ def main() -> None:
                     if real_photo_mode
                     else "controlled_fixture_train_v3_diverse_synthetic_scene",
                 }
+            record.update(label_metadata(worker, i // 3, real_photo_mode))
+            rows.append(record)
+    validation = []
+    for worker, queries in VALIDATION_QUERIES.items():
+        for i, query in enumerate(queries):
+            image = FIXTURES / "validation" / f"{worker[-1].lower()}_{i:02d}.png"
+            make_image(
+                image,
+                "safety" if worker == "Worker-D" and i % 2 == 0 else kinds[worker],
+                200 + i,
             )
+            record = {
+                "id": f"{worker[-1]}-validation-{i:02d}",
+                "image_path": str(Path("fixtures") / "validation" / image.name),
+                "query": query,
+                "label": worker,
+                "split": "validation",
+                "construction": "controlled_fixture_validation_unseen_query_family",
+            }
+            record.update(label_metadata(worker, 10 + i, False))
+            validation.append(record)
     test = []
     for worker, queries in TEST_QUERIES.items():
         for i, query in enumerate(queries):
@@ -580,8 +644,7 @@ def main() -> None:
                     "safety" if worker == "Worker-D" and i % 2 == 0 else kinds[worker],
                     100 + i,
                 )
-            test.append(
-                {
+            record = {
                     "id": f"{worker[-1]}-test-{i:02d}",
                     "image_path": str(Path("fixtures") / image.name),
                     "query": query,
@@ -592,9 +655,10 @@ def main() -> None:
                     if real_photo_mode
                     else "controlled_fixture_test_v3_unseen_query_diverse_synthetic_scene",
                 }
-            )
+            record.update(label_metadata(worker, 20 + i, real_photo_mode))
+            test.append(record)
     with open(ROOT / "training_data.jsonl", "w", encoding="utf-8") as f:
-        for record in rows + test:
+        for record in rows + validation + test:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     hard = []
     for rid, image_name, label, expected_action, query in HARD_NEGATIVES:
@@ -616,7 +680,7 @@ def main() -> None:
         for record in hard:
             f.write(json.dumps(record, ensure_ascii=False) + "\n")
     print(
-        f"wrote {len(rows)} train + {len(test)} unseen-query test + {len(hard)} hard negatives"
+        f"wrote {len(rows)} train + {len(validation)} validation + {len(test)} unseen-query test + {len(hard)} hard negatives"
     )
 
 
