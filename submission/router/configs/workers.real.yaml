@@ -4,6 +4,5 @@ worker_b: optional_openai_compatible
 worker_c: optional_openai_compatible
 worker_d: parallel_a_b
 
-# Documentation only: this YAML is not environment-variable interpolated.
-# worker_pool.py reads WORKER_B_BASE_URL / WORKER_C_BASE_URL at runtime;
-# when an endpoint is absent, the corresponding worker falls back to Mock.
+# 该文件只描述拓扑，不解析环境变量。
+# worker_pool.py 未读到 B/C endpoint 时降级为 Mock。

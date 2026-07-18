@@ -26,8 +26,8 @@ class IncrementalTrainer:
         self.feedback_store = feedback_store
         self.registry = registry
 
-    @staticmethod
     # 生成固定测试集上的宏平均和类别召回回归检查。
+    @staticmethod
     def _fixed_regression_checks(before: dict, after: dict) -> list[dict]:
         checks = []
         for metric_name in ("raw_metrics", "gated_metrics"):
@@ -55,8 +55,8 @@ class IncrementalTrainer:
                 )
         return checks
 
-    @classmethod
     # 汇总固定测试集和环境挑战集的发布门禁结果。
+    @classmethod
     def _gate_report(
         cls,
         before_test: dict,
@@ -100,13 +100,13 @@ class IncrementalTrainer:
         failed = [item["name"] for item in checks if not item["passed"]]
         return {"passed": not failed, "checks": checks, "failed_checks": failed}
 
-    @staticmethod
     # 创建带固定随机种子的路由器实例。
+    @staticmethod
     def _router(seed: int, generations: int) -> MultimodalRouter:
         return MultimodalRouter(config=RouterConfig(seed=seed, generations=generations))
 
-    @staticmethod
     # 计算训练数据的可移植内容哈希。
+    @staticmethod
     def _data_hash(records: list[dict]) -> str:
         portable_records = []
         for item in records:

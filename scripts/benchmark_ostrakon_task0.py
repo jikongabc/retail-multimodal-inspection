@@ -1,3 +1,5 @@
+# 测量 Ostrakon 五类零售场景的延迟和显存。
+
 import json
 import time
 from pathlib import Path

@@ -44,8 +44,8 @@ class ReActFlywheel:
         with self.trace_path.open("a", encoding="utf-8") as output:
             output.write(json.dumps(payload, ensure_ascii=False) + "\n")
 
-    @staticmethod
     # 提取并校验环境期望的 Worker 标签。
+    @staticmethod
     def _expected_worker(record: dict) -> str:
         worker = str(record.get("expected_worker") or record.get("label") or "")
         if worker not in WORKERS:
@@ -62,7 +62,8 @@ class ReActFlywheel:
         final_correct = final_worker == expected_worker
         reward = 1.0 if final_correct else -1.0
         if final_correct and not raw_correct:
-            reward = 0.25  # 门控救回裸模型错误，但学习头仍需吸收信号。
+            # 门控救回的裸模型错误仍需进入训练。
+            reward = 0.25
 
         confidence = float(record.get("environment_confidence", 1.0))
         source_split = str(record.get("split") or "production")

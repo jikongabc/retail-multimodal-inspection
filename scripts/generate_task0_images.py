@@ -1,3 +1,5 @@
+# 生成 Ostrakon 五类场景的确定性测试图片。
+
 from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont

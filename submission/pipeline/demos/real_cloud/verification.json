@@ -1,0 +1,20 @@
+{
+  "health": {
+    "status": "ok",
+    "model": "Ostrakon/Ostrakon-VL-8B",
+    "device": "NVIDIA GeForce RTX 3090",
+    "loaded_vram_mb": 16722.0
+  },
+  "passed": true,
+  "checks": {
+    "schema_output_present": true,
+    "real_mode": true,
+    "routing_log_present": true,
+    "worker_a_selected": true,
+    "worker_execution_succeeded": true,
+    "real_model_revision_present": true,
+    "router_latency_under_one_second": true,
+    "structured_evidence_present": true,
+    "portable_image_references": true
+  }
+}

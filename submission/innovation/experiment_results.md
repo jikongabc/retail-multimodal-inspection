@@ -6,7 +6,7 @@
 make feedback
 ```
 
-该命令读取 `submission/router/hard_negative.jsonl`，运行 ReAct 环境反馈闭环，并生成：
+输入为 `submission/router/hard_negative.jsonl`，产物如下：
 
 | 文件 | 作用 |
 |---|---|
@@ -62,11 +62,11 @@ make feedback
 | 挑战集 gated accuracy 不下降超过 0.01 | 通过 |
 | 挑战集 raw 或 gated accuracy 至少一项提升 | 通过 |
 
-门禁共 12 项检查，失败项为 0。候选版本 `router-react-v1` 已注册、激活并热加载，父版本为 `router-baseline-v1`。
+12 项门禁全部通过。候选版本 `router-react-v1` 的父版本为 `router-baseline-v1`。
 
 ## 可复现性边界
 
 - `feedback.jsonl`、`model_registry.jsonl` 和 `experiment_results.json` 不写入本机 checkout 绝对路径。
-- `router_incremental.npy` 是可重新生成的运行产物，不纳入 git；运行 `make feedback` 可重建。
-- 当前挑战集包含本轮纠错样本，挑战集提升代表已知错误修复，不等同于未知分布泛化。
+- `router_incremental.npy` 是可重建运行产物，不纳入 git。
+- 挑战集包含本轮纠错样本，提升只代表已知错误修复，不等同于未知分布泛化。
 - 固定测试集未写回训练，用于回归门禁。

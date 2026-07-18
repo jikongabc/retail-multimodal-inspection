@@ -10,10 +10,6 @@ ROOT = Path(__file__).resolve().parents[3]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-from submission.pipeline import InspectionPipeline  # noqa: E402
-from submission.pipeline.worker_pool import WorkerPool  # noqa: E402
-
-
 OUT = Path(__file__).resolve().parent
 
 
@@ -87,6 +83,9 @@ DEMOS = [
 
 # 执行三组 Demo 并写入结果文件。
 def main() -> None:
+    from submission.pipeline import InspectionPipeline
+    from submission.pipeline.worker_pool import WorkerPool
+
     index: list[dict[str, object]] = []
     for spec in DEMOS:
         paths = [path.resolve() for path in spec["images"]]

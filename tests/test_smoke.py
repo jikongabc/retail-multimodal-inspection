@@ -1,3 +1,5 @@
+# 验证主要交付链路的最小可运行性。
+
 from __future__ import annotations
 
 import unittest

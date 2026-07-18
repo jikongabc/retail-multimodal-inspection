@@ -1,0 +1,7 @@
+{
+  "image": "submission/router/fixtures/a_00.jpg",
+  "inspection_type": "商品盘点",
+  "store_id": "cloud-real-store",
+  "model": "Ostrakon/Ostrakon-VL-8B",
+  "endpoint": "http://127.0.0.1:8000/v1"
+}

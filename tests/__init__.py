@@ -1,1 +1,1 @@
-"""Repository-level smoke tests."""
+# 仓库级冒烟测试包。

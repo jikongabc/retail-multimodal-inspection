@@ -1,0 +1,54 @@
+{
+  "store_id": "cloud-real-store",
+  "inspection_time": "2026-07-18T08:04:17Z",
+  "overall_score": 75,
+  "routing_log": [
+    {
+      "image": "a_00.jpg",
+      "worker": "Worker-A",
+      "latency_ms": 8738.628,
+      "route_latency_ms": 54.514,
+      "worker_latency_ms": 8684.114,
+      "raw_worker": "Worker-A",
+      "strategy": "single_worker",
+      "confidence": 0.894,
+      "gate_upgraded": false,
+      "gate_reasons": [],
+      "query_intent": "retail_visual",
+      "model_revision": "Ostrakon/Ostrakon-VL-8B",
+      "mock": false,
+      "execution_error": null
+    }
+  ],
+  "findings": [
+    {
+      "category": "inventory",
+      "severity": "med",
+      "description": "右侧货架多处商品堆叠过高，部分区域出现空缺，可能影响取货效率和安全。",
+      "image_ref": "a_00.jpg"
+    }
+  ],
+  "compliance_items": [
+    {
+      "item": "右侧饮料箱堆叠区",
+      "status": "fail",
+      "evidence": "部分箱子空缺，如中间偏右位置有明显空位。"
+    },
+    {
+      "item": "货架左侧锅具区",
+      "status": "pass",
+      "evidence": "可见多层锅具整齐摆放，无明显缺货。"
+    }
+  ],
+  "recommendations": [
+    "复核未通过的合规项，按门店标准完成整改并留存证据。",
+    "对空货位进行补货复核，并将盘点结果与库存系统对账。"
+  ],
+  "request_id": "cloud-real-e2e",
+  "inspection_type": "商品盘点",
+  "mock_mode": false,
+  "warnings": [],
+  "model_versions": [
+    "Ostrakon/Ostrakon-VL-8B"
+  ]
+}

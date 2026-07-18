@@ -2,9 +2,9 @@
 
 ## 1. 设计结论
 
-设计将 OpenFugu 的“轻量路由头 + 外部 Worker”扩展为图文路由：冻结图像/文本特征提取器，只训练一个四分类线性头；在线阶段按请求特征选择 Worker，再由置信度、复杂度和不确定性触发 Worker-D 的 A+B 并行聚合。
+OpenFugu 的“轻量路由头 + 外部 Worker”扩展为图文路由：冻结图像/文本特征提取器，只训练四分类线性头；置信度、复杂度和不确定性可触发 Worker-D 的 A+B 并行聚合。
 
-设计参考阶跃星辰公开的 `step-router-v1` 产品原则，将公开的请求分流、复杂度升级和结构化输出行为映射为本地可审计路由策略，不使用其内部权重或算法。
+复杂度升级和结构化输出参考 `step-router-v1` 的公开产品原则，不使用其内部权重或算法。
 
 ## 2. Worker 策略
 
@@ -21,11 +21,11 @@ D 不是一个更大的模型，而是一个执行策略。这样既保留专长
 
 ### 3.1 候选方案与默认选择
 
-* α：CLIP 图像 embedding + sentence embedding 拼接。跨模态语义完整，但需要下载两个权重，首次加载和显存成本较高；代码保留兼容接口，外部权重不是实验前置条件。
+* α：CLIP 图像 embedding + sentence embedding 拼接。跨模态语义完整，但需要额外权重和显存；通过 `MM_ROUTER_USE_CLIP=1` 启用。
 * β：先用 Ostrakon 生成图片描述，再做文本 embedding。语义解释性最好，但会把一次 VLM 推理放进路由关键路径，违反“路由额外延迟 <1 秒”的风险约束，并可能把 Ostrakon 的识别偏差传给路由器。
 * γ：图像统计量 + 关键词 one-hot。延迟低、无需模型，但对开放域语义泛化弱。
 
-默认后端为 **γ-轻量混合变体**：64 维图像颜色/纹理/边缘统计、96 维确定性哈希文本特征和 16 维关键词/复杂度信号，模态权重为 0.10/0.70/0.20。该后端不是 CLIP；`MM_ROUTER_USE_CLIP=1` 提供 α 的替换接口。两种后端特征分布不同，切换后必须重新训练 `router_weights.npy`。当前实验结果仅对应 γ 后端。
+默认后端为 **γ-轻量混合变体**：64 维图像颜色/纹理/边缘统计、96 维确定性哈希文本特征和 16 维关键词/复杂度信号，模态权重为 0.10/0.70/0.20。该后端不是 CLIP；切换 α 后必须重新训练 `router_weights.npy`。报告指标仅对应 γ 后端。
 
 显式的 16 维信号包括盘点、合规、OCR、环境、报告、推理、开放域、复杂度、高风险、多图、不确定性等。
 
@@ -39,11 +39,11 @@ x = \mathrm{Norm}([0.10\,\mathrm{Norm}(v);0.70\,\mathrm{Norm}(t);0.20\,\mathrm{N
 
 路由头只输出四个 Worker logits，不生成答案。在线决策为：先取 `argmax(p)`；若请求包含“综合/交叉验证/高风险/不能确定/多图”等门控信号，或最大概率低于 0.56、前两类概率 margin 小于 0.08，则升级到 D。该门控模仿 Step Router 的“复杂任务升级、高频任务走快路径”，并防止一个过度自信的专长模型独占风险结论。
 
-针对 hard-negative 暴露的 confidently-wrong 问题，新增低成本 `image_scene_hint()`：依据颜色主导和背景统计给出 shelf/open/report/safety 的可审计提示，再与查询意图比较。明确查询意图优先于弱视觉提示：货架图但只要通用描述仍转 B，开放式商品数量请求仍转 A，已有文字结果/不要重新识别的报告请求转 C；只有意图模糊或明确要求交叉验证时升级 D。它不是第二个 VLM，当前阈值只是照片夹具上的弱启发式，真实门店应换成校准的轻量 scene head。
+`image_scene_hint()` 根据颜色和背景统计给出 shelf/open/report/safety 提示，再与查询意图比较。明确查询意图优先于弱视觉提示：货架图的通用描述转 B，商品数量请求转 A，已有文字结果转 C；意图模糊或要求交叉验证时升级 D。该提示不是 VLM，阈值只适用于照片夹具；真实门店需要校准的轻量 scene head。
 
 ## 4. sep-CMA-ES 训练
 
-输入特征冻结，路由头参数量为 `4 × (176+1) = 708`。实现了与 OpenFugu 相同的 `ask → evaluate → rank → tell` 逻辑：每一代围绕均值采样候选，按适应度排序，使用前半数精英更新均值和对角协方差。对角协方差把状态从完整 (O(n^2)) 降为 (O(n))，适合黑盒 Worker 奖励；如果只有人工路由标签，交叉熵梯度下降会更省样本，但本题要求复用 sep-CMA-ES，因此保留进化优化路径。
+输入特征冻结，路由头参数量为 `4 × (176+1) = 708`。优化器遵循 OpenFugu 的 `ask → evaluate → rank → tell`：围绕均值采样候选，按适应度排序，使用前半数精英更新均值和对角协方差。对角协方差把状态从 O(n²) 降为 O(n)，适合黑盒 Worker 奖励；具备逐样本标签时，交叉熵梯度下降通常更省样本。
 
 目标函数为：
 
@@ -55,13 +55,13 @@ J(\theta)=\mathrm{gated\_accuracy}(\theta)-0.03\times\mathrm{cross\_entropy}(\th
 
 ## 5. 数据构造
 
-`training_data.jsonl` 共 75 条：60 条训练、15 条测试。训练集每类 15 条；测试集 A/B/C 各 4 条、D 3 条，这是题目固定 15 条测试样本下的近似均衡切分。训练查询与测试查询使用两套不相交的措辞模板，测试图片使用不同文件；脚本显式写入 `split=train/test`，不再依赖文件尾部切分。每条包含 `image_path`、`query`、`label`，图片来自 Wikimedia Commons 的真实照片，类别覆盖超市货架、街景、纸质文档和紧急出口/安全通道。
+`training_data.jsonl` 共 91 条：60 条训练、16 条验证、15 条测试。训练集每类 15 条；验证集每类 4 条；测试集 A/B/C 各 4 条、D 3 条。三组查询模板、图片路径和图片内容互不重叠。train/test 使用 Wikimedia Commons 许可照片，validation 使用独立控制夹具；场景覆盖货架、开放域、文档和安全通道。
 
 1. 单一意图：盘点、开放域理解、报告汇总；
 2. 复合意图：盘点 + 合规、OCR + 报告、多图汇总；
 3. 风险与不确定性：高风险、模糊、要求交叉验证。
 
-另外独立生成 `hard_negative.jsonl` 共 12 条，不参与训练，专门覆盖“开放域图片 + 商品词”“货架图但只要通用描述”“混合图但只要报告”等边界。hard-negative **故意复用训练照片**，以隔离 query 侧冲突，不计入 clean split 的 image_overlap 指标。`label` 是预先按查询意图独立标注的 Worker gold：hn-02/08/12 为 B，hn-05/10 为 A，hn-09 为 C，不能因为 gate 设计为升级 D 就改写这些标签。另设 `expected_action` 作为独立 gate-policy 标注，用于统计误升级率和 D 召回，不参与 Worker accuracy。真实照片来源、作者、文件页和许可写入 `real_fixture_sources.jsonl`；这些公开照片不是本门店采集集，结果仍不能替代按门店、摄像头和商品类别分组的真实验收。
+`hard_negative.jsonl` 含 12 条边界样本，不参与训练，覆盖“开放域图片 + 商品词”“货架图但只要通用描述”“混合图但只要报告”。它复用训练照片以隔离 query 冲突，不计入 clean split 的 image overlap。`label` 是独立 Worker gold；`expected_action` 是 gate-policy 标注，只用于误升级率和 D 召回。来源、作者、文件页和许可记录在 `real_fixture_sources.jsonl`。
 
 ## 6. 运行方式
 
@@ -76,7 +76,7 @@ python submission/router/mm_router.py --mode predict \
 
 路由器不加载 Ostrakon 或任何 Worker，不执行生成；本地实验只测特征提取和线性头，因此满足额外延迟约束。真实部署时由上层 Worker Pool 根据 `worker` 和 `strategy` 调用模型。
 
-`--mode train/evaluate` 会同时打印 clean test 的 raw/gated 两套结果和 hard-negative 结果；`route()` 返回 `raw_worker`、最终 `worker`、`gate_upgraded`、`gate_reasons` 和按意图生成的 `prompt_rewrite`，用于 Pipeline 日志审计升级原因。
+`--mode train/evaluate` 输出 clean test 的 raw/gated 指标和 hard-negative 指标；`route()` 返回 `raw_worker`、`worker`、`gate_upgraded`、`gate_reasons` 和 `prompt_rewrite`。
 
 ## 参考
 

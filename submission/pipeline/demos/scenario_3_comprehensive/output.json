@@ -1,14 +1,14 @@
 {
   "store_id": "store-mixed-003",
-  "inspection_time": "2026-07-18T04:19:57Z",
+  "inspection_time": "2026-07-18T08:29:02Z",
   "overall_score": 55,
   "routing_log": [
     {
       "image": "open_domain.png",
       "worker": "Worker-D",
-      "latency_ms": 11.184,
-      "route_latency_ms": 10.437,
-      "worker_latency_ms": 0.747,
+      "latency_ms": 11.167,
+      "route_latency_ms": 10.646,
+      "worker_latency_ms": 0.521,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.8374,
@@ -19,6 +19,8 @@
         "uncertain"
       ],
       "query_intent": "complex",
+      "model_revision": "parallel(mock-worker_a-v1,mock-worker_b-v1)",
+      "mock": true,
       "execution_error": null,
       "expected_worker": "Worker-B",
       "routing_error": true,
@@ -27,9 +29,9 @@
     {
       "image": "shelf_hybrid.png",
       "worker": "Worker-D",
-      "latency_ms": 10.784,
-      "route_latency_ms": 9.945,
-      "worker_latency_ms": 0.84,
+      "latency_ms": 12.441,
+      "route_latency_ms": 11.825,
+      "worker_latency_ms": 0.615,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.8458,
@@ -40,6 +42,8 @@
         "uncertain"
       ],
       "query_intent": "complex",
+      "model_revision": "parallel(mock-worker_a-v1,mock-worker_b-v1)",
+      "mock": true,
       "execution_error": null,
       "expected_worker": "Worker-D",
       "routing_error": false
@@ -47,9 +51,9 @@
     {
       "image": "conflict_exit.png",
       "worker": "Worker-D",
-      "latency_ms": 11.443,
-      "route_latency_ms": 10.954,
-      "worker_latency_ms": 0.489,
+      "latency_ms": 10.984,
+      "route_latency_ms": 10.468,
+      "worker_latency_ms": 0.517,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.8449,
@@ -60,6 +64,8 @@
         "uncertain"
       ],
       "query_intent": "complex",
+      "model_revision": "parallel(mock-worker_a-v1,mock-worker_b-v1)",
+      "mock": true,
       "execution_error": null,
       "expected_worker": "Worker-D",
       "routing_error": false

@@ -73,8 +73,8 @@ class SepCMAES:
         return best_x, best_score, history
 
 
+# 计算准确率、宏平均指标和逐类指标。
 def classification_metrics(y_true: np.ndarray, y_pred: np.ndarray) -> dict:
-    """Return accuracy and macro/per-class metrics without extra dependencies."""
     per_class = {}
     f1_values = []
     for index, worker in enumerate(WORKERS):
@@ -112,8 +112,8 @@ class MultimodalRouter:
         self.config = config or RouterConfig()
         self.weights: np.ndarray | None = None
 
-    @property
     # 返回路由头参数量。
+    @property
     def parameter_count(self) -> int:
         return len(WORKERS) * (self.extractor.config.dim + 1)
 
@@ -289,8 +289,8 @@ class MultimodalRouter:
             "query_intent": query_intent,
         }
 
-    @staticmethod
     # 使用类别中心初始化路由头。
+    @staticmethod
     def _initial_from_centroids(X, y, classes):
         W = np.zeros((len(classes), X.shape[1]), dtype=np.float32)
         for i, cls in enumerate(classes):
@@ -399,7 +399,6 @@ class MultimodalRouter:
 
     # 提供不读取模型 logits 的规则基线，用于量化门控的独立贡献。
     def _rule_only_worker(self, query: str, image_path=None) -> int:
-        """Apply the shared gate policy without model logits or probabilities."""
         policy = self._rule_policy(query, image_path)
         query_intent = policy["query_intent"]
         if policy["explicit_text_only"]:
@@ -496,8 +495,8 @@ class MultimodalRouter:
             "latency_ms": round((time.perf_counter() - start) * 1000, 3),
         }
 
-    @staticmethod
     # 生成 Worker 专用提示词。
+    @staticmethod
     def _rewrite(worker: str, query: str, upgraded: bool) -> str:
         prefix = {
             "Worker-A": "以零售视觉专员身份，输出商品/货架位置、数量、证据框和不确定项。",

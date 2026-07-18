@@ -1,20 +1,22 @@
 /docs/
+.env*
+!.env.example
 __pycache__/
 *.pyc
 .ruff_cache/
 
-# Keep the real route fixtures self-contained, but do not commit generated PNG duplicates.
+# 提交真实路由夹具，忽略重复生成的 PNG。
 fixtures/
 !submission/router/fixtures/
 submission/router/fixtures/*.png
 !submission/router/fixtures/*.jpg
 !submission/router/fixtures/*.jpeg
 
-# Keep runtime caches and checkpoints out of the delivery tree.
+# 忽略运行缓存和可重建 checkpoint。
 submission/innovation/__pycache__/
 submission/innovation/router_incremental.npy
+submission/pipeline/demos/real_cloud/ostrakon_server.log
 
-# Local-only analysis and generated submission metadata.
-/submission/analysis/
+# 忽略本地生成的交付元数据。
 /submission/MANIFEST.sha256
 scripts/__pycache__/

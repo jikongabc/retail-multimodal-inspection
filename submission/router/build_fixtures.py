@@ -472,7 +472,6 @@ VALIDATION_QUERIES = {
 }
 
 HARD_NEGATIVES = [
-    # 写入独立的 Worker 标签和门控策略标签。
     (
         "hn-01",
         "b_00",
@@ -554,8 +553,8 @@ HARD_NEGATIVES = [
 ]
 
 
+# 为生成样本附加可审计的标注元数据。
 def label_metadata(worker: str, family_index: int, real_photo_mode: bool) -> dict:
-    """Attach auditable labeling metadata to every generated route record."""
     reasons = {
         "Worker-A": "零售细粒度视觉任务由领域 Worker-A 处理",
         "Worker-B": "开放域视觉理解不应套用零售先验",
@@ -570,7 +569,7 @@ def label_metadata(worker: str, family_index: int, real_photo_mode: bool) -> dic
     return {
         "label_reason": reasons[worker],
         "risk_level": risk,
-        # The group is a semantic query-family identifier, not a split-derived name.
+        # 模板组表示语义查询族，不编码数据切分名称。
         "template_group": f"{worker[-1].lower()}_qf_{family_index:02d}",
         "source": "public_licensed_photo" if real_photo_mode else "controlled_fixture",
     }

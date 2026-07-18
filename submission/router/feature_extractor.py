@@ -26,8 +26,8 @@ class FeatureConfig:
     use_text: bool = True
     use_signals: bool = True
 
-    @property
     # 返回拼接后的特征维度。
+    @property
     def dim(self) -> int:
         return self.image_dim + self.text_dim + 16
 
@@ -168,8 +168,8 @@ class MultimodalFeatureExtractor:
             self._text_model = None
             self.backend = "gamma-offline"
 
-    @staticmethod
     # 计算稳定的有符号哈希文本向量。
+    @staticmethod
     def _hash_embedding(text: str, dim: int) -> np.ndarray:
         out = np.zeros(dim, dtype=np.float32)
         grams = list(re.findall(r"[\u4e00-\u9fff]", text.lower()))
@@ -340,8 +340,8 @@ class MultimodalFeatureExtractor:
         norm = np.linalg.norm(vec)
         return vec / norm if norm else vec
 
-    @staticmethod
     # 将输入向量投影到指定维度并归一化。
+    @staticmethod
     def _resize_projection(values: Iterable[float], dim: int) -> np.ndarray:
         values = np.asarray(list(values), dtype=np.float32)
         if values.size == dim:

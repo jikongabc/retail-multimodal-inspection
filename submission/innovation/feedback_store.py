@@ -38,8 +38,8 @@ def portable_path_identity(value: str) -> str:
     return path.as_posix()
 
 
-@dataclass(frozen=True)
 # 描述一条来自人工或环境信号的路由纠错。
+@dataclass(frozen=True)
 class Feedback:
     request_id: str
     image_path: str
@@ -53,16 +53,16 @@ class Feedback:
     environment_reward: float | None = None
     auto_approve: bool = False
 
-    @property
     # 标识同一个环境样本以发现互斥标签。
+    @property
     def case_fingerprint(self) -> str:
         return _sha256(
             _normalize(portable_path_identity(self.image_path)),
             _normalize(self.query),
         )
 
-    @property
     # 标识一条完整纠错以执行精确去重。
+    @property
     def fingerprint(self) -> str:
         return _sha256(self.case_fingerprint, self.correct_worker)
 
@@ -104,8 +104,8 @@ class FeedbackStore:
             return str(path)
         return str((self.path.parent / path).resolve())
 
-    @staticmethod
     # 校验反馈字段和训练安全约束。
+    @staticmethod
     def _validate(feedback: Feedback) -> None:
         if not feedback.request_id or not feedback.image_path or not feedback.query:
             raise ValueError("request_id, image_path and query are required")

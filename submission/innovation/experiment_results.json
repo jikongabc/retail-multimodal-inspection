@@ -1,5 +1,5 @@
 {
-  "episode_id": "a71f9db355bb45289995818bb699b362",
+  "episode_id": "9790ea5a7c36495e9471f63e6488c53d",
   "environment_count": 12,
   "environment_reward_mean": 0.7708,
   "action_counts": {
@@ -3639,11 +3639,11 @@
         ],
         "training_data_hash": "5759ab7c5c429c192fa36cbabaf422b8570277584648ef691f4f789781bb52c7",
         "feedback_data_hash": "c816f7f335a90771a91e5643451148b8ed0d73fd3b536ea5bf2480753f5231bb",
-        "training_duration_ms": 6302.322,
+        "training_duration_ms": 6393.668,
         "artifact_saved": true
       },
-      "created_at": "2026-07-18T06:23:02.761050+00:00",
-      "activated_at": "2026-07-18T06:23:02.763195+00:00",
+      "created_at": "2026-07-18T08:29:11.746358+00:00",
+      "activated_at": "2026-07-18T08:29:11.746983+00:00",
       "activation_reason": "regression_gate_passed"
     }
   },
@@ -3658,6 +3658,6 @@
     "replay_weight": 1,
     "baseline": "submission/router/router_weights.npy",
     "challenge": "submission/router/hard_negative.jsonl",
-    "demo_state_reset": false
+    "demo_state_reset": true
   }
 }

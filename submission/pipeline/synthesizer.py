@@ -63,8 +63,8 @@ class EvidenceSynthesizer:
         validate_report(report)
         return report
 
-    @staticmethod
     # 展开 D 的来源结果以保留冲突信息。
+    @staticmethod
     def _iter_result_sources(results: list[dict[str, Any]]):
         for result in results:
             source_results = result.get("metadata", {}).get("source_results", [])
@@ -100,8 +100,8 @@ class EvidenceSynthesizer:
             ),
         )
 
-    @staticmethod
     # 规范化单条发现。
+    @staticmethod
     def _normalize_finding(
         finding: dict[str, Any], result: dict[str, Any]
     ) -> dict[str, Any]:
@@ -152,19 +152,24 @@ class EvidenceSynthesizer:
             merged.append({"item": name, "status": status, "evidence": evidence})
         return merged
 
-    @staticmethod
     # 根据发现和合规状态生成建议。
+    @staticmethod
     def _recommendations(
         findings: list[dict[str, Any]], compliance: list[dict[str, Any]]
     ) -> list[str]:
         recommendations: list[str] = []
         categories = {item["category"] for item in findings}
-        if "safety_obstruction" in categories or any(
-            item["status"] == "fail" for item in compliance
-        ):
+        failed_items = [item for item in compliance if item["status"] == "fail"]
+        safety_failure = "safety_obstruction" in categories or any(
+            any(token in item["item"] for token in ("消防", "通道", "出口", "安全"))
+            for item in failed_items
+        )
+        if safety_failure:
             recommendations.append(
                 "立即清理消防出口和通道附近的障碍物，并由现场负责人复核。"
             )
+        elif failed_items:
+            recommendations.append("复核未通过的合规项，按门店标准完成整改并留存证据。")
         if "inventory" in categories:
             recommendations.append("对空货位进行补货复核，并将盘点结果与库存系统对账。")
         if "open_scene" in categories:

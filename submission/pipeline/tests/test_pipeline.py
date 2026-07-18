@@ -102,6 +102,33 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(pass_report["overall_score"], 100)
         self.assertEqual(fail_report["overall_score"], 85)
 
+    # 验证非安全类失败不会生成消防整改建议。
+    def test_non_safety_failure_uses_generic_remediation(self):
+        report = EvidenceSynthesizer().synthesize(
+            "store",
+            "2026-07-18T00:00:00Z",
+            [
+                {
+                    "worker_id": "Worker-A",
+                    "image_path": "shelf.jpg",
+                    "raw_text": "发现空位",
+                    "findings": [],
+                    "compliance_items": [
+                        {"item": "货架空位", "status": "fail", "evidence": "可见空位"}
+                    ],
+                    "confidence": 0.9,
+                    "mock": False,
+                    "metadata": {},
+                }
+            ],
+            [],
+            "商品盘点",
+            "inventory-fail",
+            False,
+        )
+        self.assertIn("复核未通过的合规项", report["recommendations"][0])
+        self.assertNotIn("消防", "".join(report["recommendations"]))
+
     # 验证语义文件名可以解析场景。
     def test_profile_keywords_support_semantic_demo_names(self):
         self.assertEqual(_profile_for("/tmp/shelf_front.png", {}), "shelf")

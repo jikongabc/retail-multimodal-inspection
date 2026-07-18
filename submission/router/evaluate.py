@@ -1,4 +1,4 @@
-"""Task 2 reproducible metrics, validation split, seed runs and ablations."""
+# Task 2 可复现评估、固定切分、多种子运行与特征消融。
 
 from __future__ import annotations
 
@@ -14,8 +14,8 @@ from .feature_extractor import FeatureConfig
 from .mm_router import MultimodalRouter, RouterConfig, load_jsonl
 
 
+# 优先使用显式验证集，否则按完整模板组切分。
 def split_records(records: list[dict], validation_per_class: int = 4):
-    """Use explicit validation rows; otherwise split whole template groups."""
     explicit_validation = any(row.get("split") == "validation" for row in records)
     if explicit_validation:
         return (
@@ -43,6 +43,7 @@ def split_records(records: list[dict], validation_per_class: int = 4):
     return train, validation, test
 
 
+# 汇总端到端路由延迟分位数。
 def latency_summary(router: MultimodalRouter, records: list[dict]) -> dict:
     values = []
     for row in records:
@@ -59,6 +60,7 @@ def latency_summary(router: MultimodalRouter, records: list[dict]) -> dict:
     }
 
 
+# 使用指定种子训练并评估一次路由器。
 def run_once(train, validation, test, seed: int, feature_config=None, generations=90):
     config = RouterConfig(seed=seed, generations=generations)
     router = MultimodalRouter(config=config, extractor=None)
@@ -75,6 +77,7 @@ def run_once(train, validation, test, seed: int, feature_config=None, generation
     }
 
 
+# 解析参数并生成机器可读评估结果。
 def main() -> None:
     parser = argparse.ArgumentParser(description="Evaluate the multimodal router")
     parser.add_argument(

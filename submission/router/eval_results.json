@@ -5,7 +5,7 @@
       17,
       27
     ],
-    "generations": 30,
+    "generations": 90,
     "validation_per_class": 4
   },
   "dataset": {
@@ -37,34 +37,34 @@
       "seed": 7,
       "validation": {
         "accuracy": 0.75,
-        "raw_accuracy": 0.6875,
+        "raw_accuracy": 0.8125,
         "gated_accuracy": 0.75,
         "raw_metrics": {
-          "accuracy": 0.6875,
-          "macro_f1": 0.6878,
+          "accuracy": 0.8125,
+          "macro_f1": 0.8016,
           "per_class": {
             "Worker-A": {
-              "precision": 0.5,
+              "precision": 0.6667,
               "recall": 0.5,
-              "f1": 0.5,
+              "f1": 0.5714,
               "support": 4
             },
             "Worker-B": {
-              "precision": 0.5714,
+              "precision": 0.8,
               "recall": 1.0,
-              "f1": 0.7273,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
+              "precision": 0.8,
+              "recall": 1.0,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-D": {
               "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
+              "recall": 0.75,
+              "f1": 0.8571,
               "support": 4
             }
           }
@@ -132,8 +132,8 @@
         "raw_confusion_matrix": [
           [
             2,
-            2,
-            0,
+            1,
+            1,
             0
           ],
           [
@@ -144,15 +144,15 @@
           ],
           [
             0,
-            1,
-            3,
+            0,
+            4,
             0
           ],
           [
-            2,
+            1,
             0,
             0,
-            2
+            3
           ]
         ],
         "gated_confusion_matrix": [
@@ -184,19 +184,19 @@
         "raw_predictions": [
           0,
           1,
+          2,
           0,
           1,
           1,
           1,
           1,
-          1,
           2,
           2,
-          1,
+          2,
           2,
           3,
           3,
-          0,
+          3,
           0
         ],
         "gated_predictions": [
@@ -235,22 +235,22 @@
           3,
           3
         ],
-        "gate_changes": 8,
-        "gate_change_rate": 0.5,
-        "gate_corrections": 4,
-        "gate_regressions": 3,
-        "gate_neutral_changes": 1,
-        "gate_net_benefit": 1,
+        "gate_changes": 7,
+        "gate_change_rate": 0.4375,
+        "gate_corrections": 3,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -1,
         "estimated_cost": {
-          "raw_mean_units": 1.125,
+          "raw_mean_units": 1.1875,
           "gated_mean_units": 1.5,
           "rule_only_mean_units": 1.5625,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 9,
-          "intent_confidence_override": 4,
+          "low_confidence": 5,
           "low_margin": 2,
+          "intent_confidence_override": 3,
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
           "complex_keyword": 3,
@@ -342,16 +342,16 @@
       },
       "test": {
         "accuracy": 1.0,
-        "raw_accuracy": 0.8,
+        "raw_accuracy": 0.8666666666666667,
         "gated_accuracy": 1.0,
         "raw_metrics": {
-          "accuracy": 0.8,
-          "macro_f1": 0.7615,
+          "accuracy": 0.8667,
+          "macro_f1": 0.8587,
           "per_class": {
             "Worker-A": {
-              "precision": 0.6667,
+              "precision": 0.8,
               "recall": 1.0,
-              "f1": 0.8,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-B": {
@@ -368,8 +368,8 @@
             },
             "Worker-D": {
               "precision": 1.0,
-              "recall": 0.3333,
-              "f1": 0.5,
+              "recall": 0.6667,
+              "f1": 0.8,
               "support": 3
             }
           }
@@ -454,10 +454,10 @@
             0
           ],
           [
-            1,
+            0,
             1,
             0,
-            1
+            2
           ]
         ],
         "gated_confusion_matrix": [
@@ -500,7 +500,7 @@
           2,
           0,
           3,
-          0,
+          3,
           1
         ],
         "gated_predictions": [
@@ -537,22 +537,22 @@
           3,
           3
         ],
-        "gate_changes": 3,
-        "gate_change_rate": 0.2,
-        "gate_corrections": 3,
+        "gate_changes": 2,
+        "gate_change_rate": 0.1333,
+        "gate_corrections": 2,
         "gate_regressions": 0,
         "gate_neutral_changes": 0,
-        "gate_net_benefit": 3,
+        "gate_net_benefit": 2,
         "estimated_cost": {
-          "raw_mean_units": 1.0667,
+          "raw_mean_units": 1.1333,
           "gated_mean_units": 1.2,
           "rule_only_mean_units": 1.2,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 7,
-          "intent_confidence_override": 5,
-          "low_margin": 3,
+          "low_confidence": 3,
+          "low_margin": 2,
+          "intent_confidence_override": 2,
           "explicit_text_only": 1,
           "complex_keyword": 3,
           "multi_image": 1
@@ -637,9 +637,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 8.955,
-        "p95_ms": 13.792,
-        "max_ms": 15.092
+        "p50_ms": 8.902,
+        "p95_ms": 14.453,
+        "max_ms": 16.24
       }
     },
     {
@@ -801,8 +801,8 @@
           1,
           2,
           2,
-          2,
           3,
+          2,
           3,
           3,
           3,
@@ -844,10 +844,10 @@
           3,
           3
         ],
-        "gate_changes": 6,
-        "gate_change_rate": 0.375,
-        "gate_corrections": 2,
-        "gate_regressions": 4,
+        "gate_changes": 4,
+        "gate_change_rate": 0.25,
+        "gate_corrections": 1,
+        "gate_regressions": 3,
         "gate_neutral_changes": 0,
         "gate_net_benefit": -2,
         "estimated_cost": {
@@ -857,9 +857,1226 @@
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 8,
-          "low_margin": 5,
-          "intent_confidence_override": 5,
+          "low_confidence": 2,
+          "intent_confidence_override": 1,
+          "image_query_conflict": 4,
+          "ambiguous_conflict_escalation": 4,
+          "complex_keyword": 3,
+          "high_risk": 1,
+          "uncertain": 1
+        },
+        "scene_hints": [
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.4,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.468,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.302,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          }
+        ]
+      },
+      "test": {
+        "accuracy": 1.0,
+        "raw_accuracy": 1.0,
+        "gated_accuracy": 1.0,
+        "raw_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "gated_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "gated_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "raw_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gated_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 0,
+        "gate_change_rate": 0.0,
+        "gate_corrections": 0,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 0,
+        "estimated_cost": {
+          "raw_mean_units": 1.2,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
+        "gate_reasons": {
+          "low_confidence": 3,
+          "intent_confidence_override": 1,
+          "explicit_text_only": 1,
+          "complex_keyword": 3,
+          "multi_image": 1,
+          "low_margin": 1
+        },
+        "scene_hints": [
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "safety",
+            "confidence": 0.839,
+            "evidence": "red_warning_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.317,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          }
+        ]
+      },
+      "latency": {
+        "count": 15,
+        "p50_ms": 9.068,
+        "p95_ms": 14.392,
+        "max_ms": 14.969
+      }
+    },
+    {
+      "seed": 27,
+      "validation": {
+        "accuracy": 0.75,
+        "raw_accuracy": 1.0,
+        "gated_accuracy": 0.75,
+        "raw_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            }
+          }
+        },
+        "gated_metrics": {
+          "accuracy": 0.75,
+          "macro_f1": 0.75,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.5,
+              "recall": 1.0,
+              "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
+              "support": 4
+            }
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            4
+          ]
+        ],
+        "gated_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            4
+          ]
+        ],
+        "raw_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gated_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          1,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 4,
+        "gate_change_rate": 0.25,
+        "gate_corrections": 0,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -4,
+        "estimated_cost": {
+          "raw_mean_units": 1.25,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
+        "gate_reasons": {
+          "low_confidence": 2,
+          "intent_confidence_override": 1,
+          "image_query_conflict": 4,
+          "ambiguous_conflict_escalation": 4,
+          "complex_keyword": 3,
+          "high_risk": 1,
+          "uncertain": 1
+        },
+        "scene_hints": [
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.4,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.468,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.302,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "report",
+            "confidence": 0.78,
+            "evidence": "purple_document_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          }
+        ]
+      },
+      "test": {
+        "accuracy": 1.0,
+        "raw_accuracy": 1.0,
+        "gated_accuracy": 1.0,
+        "raw_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "gated_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 1.0,
+          "macro_f1": 1.0,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 3
+            }
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "gated_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            4,
+            0
+          ],
+          [
+            0,
+            0,
+            0,
+            3
+          ]
+        ],
+        "raw_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gated_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 0,
+        "gate_change_rate": 0.0,
+        "gate_corrections": 0,
+        "gate_regressions": 0,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": 0,
+        "estimated_cost": {
+          "raw_mean_units": 1.2,
+          "gated_mean_units": 1.2,
+          "rule_only_mean_units": 1.2,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
+        "gate_reasons": {
+          "low_confidence": 3,
+          "intent_confidence_override": 2,
+          "explicit_text_only": 1,
+          "complex_keyword": 3,
+          "multi_image": 1
+        },
+        "scene_hints": [
+          {
+            "scene": "shelf",
+            "confidence": 0.72,
+            "evidence": "warm_shelf_background"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "safety",
+            "confidence": 0.839,
+            "evidence": "red_warning_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "open",
+            "confidence": 0.317,
+            "evidence": "blue_open_scene_dominance"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          },
+          {
+            "scene": "unknown",
+            "confidence": 0.0,
+            "evidence": "no_stable_scene_hint"
+          }
+        ]
+      },
+      "latency": {
+        "count": 15,
+        "p50_ms": 9.372,
+        "p95_ms": 14.679,
+        "max_ms": 15.306
+      }
+    }
+  ],
+  "ablations": {
+    "text_only": {
+      "seed": 7,
+      "validation": {
+        "accuracy": 0.75,
+        "raw_accuracy": 0.8125,
+        "gated_accuracy": 0.75,
+        "raw_metrics": {
+          "accuracy": 0.8125,
+          "macro_f1": 0.8128,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.75,
+              "f1": 0.8571,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.5714,
+              "recall": 1.0,
+              "f1": 0.7273,
+              "support": 4
+            }
+          }
+        },
+        "gated_metrics": {
+          "accuracy": 0.75,
+          "macro_f1": 0.75,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.5,
+              "recall": 1.0,
+              "f1": 0.6667,
+              "support": 4
+            }
+          }
+        },
+        "rule_only_metrics": {
+          "accuracy": 0.6875,
+          "macro_f1": 0.6705,
+          "per_class": {
+            "Worker-A": {
+              "precision": 1.0,
+              "recall": 1.0,
+              "f1": 1.0,
+              "support": 4
+            },
+            "Worker-B": {
+              "precision": 1.0,
+              "recall": 0.25,
+              "f1": 0.4,
+              "support": 4
+            },
+            "Worker-C": {
+              "precision": 1.0,
+              "recall": 0.5,
+              "f1": 0.6667,
+              "support": 4
+            },
+            "Worker-D": {
+              "precision": 0.4444,
+              "recall": 1.0,
+              "f1": 0.6154,
+              "support": 4
+            }
+          }
+        },
+        "raw_confusion_matrix": [
+          [
+            2,
+            0,
+            0,
+            2
+          ],
+          [
+            0,
+            4,
+            0,
+            0
+          ],
+          [
+            0,
+            0,
+            3,
+            1
+          ],
+          [
+            0,
+            0,
+            0,
+            4
+          ]
+        ],
+        "gated_confusion_matrix": [
+          [
+            4,
+            0,
+            0,
+            0
+          ],
+          [
+            0,
+            2,
+            0,
+            2
+          ],
+          [
+            0,
+            0,
+            2,
+            2
+          ],
+          [
+            0,
+            0,
+            0,
+            4
+          ]
+        ],
+        "raw_predictions": [
+          0,
+          3,
+          0,
+          3,
+          1,
+          1,
+          1,
+          1,
+          3,
+          2,
+          2,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gated_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          1,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "rule_only_predictions": [
+          0,
+          0,
+          0,
+          0,
+          3,
+          1,
+          3,
+          3,
+          2,
+          3,
+          3,
+          2,
+          3,
+          3,
+          3,
+          3
+        ],
+        "gate_changes": 7,
+        "gate_change_rate": 0.4375,
+        "gate_corrections": 3,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -1,
+        "estimated_cost": {
+          "raw_mean_units": 1.4375,
+          "gated_mean_units": 1.5,
+          "rule_only_mean_units": 1.5625,
+          "unit_definition": "single_worker=1, parallel_A_B=2"
+        },
+        "gate_reasons": {
+          "low_confidence": 6,
+          "low_margin": 4,
+          "intent_confidence_override": 4,
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
           "complex_keyword": 3,
@@ -955,12 +2172,12 @@
         "gated_accuracy": 1.0,
         "raw_metrics": {
           "accuracy": 0.8,
-          "macro_f1": 0.7937,
+          "macro_f1": 0.7952,
           "per_class": {
             "Worker-A": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
+              "precision": 0.6667,
+              "recall": 1.0,
+              "f1": 0.8,
               "support": 4
             },
             "Worker-B": {
@@ -970,15 +2187,15 @@
               "support": 4
             },
             "Worker-C": {
-              "precision": 0.8,
-              "recall": 1.0,
-              "f1": 0.8889,
+              "precision": 1.0,
+              "recall": 0.75,
+              "f1": 0.8571,
               "support": 4
             },
             "Worker-D": {
-              "precision": 0.5,
+              "precision": 0.6667,
               "recall": 0.6667,
-              "f1": 0.5714,
+              "f1": 0.6667,
               "support": 3
             }
           }
@@ -1045,27 +2262,27 @@
         },
         "raw_confusion_matrix": [
           [
-            3,
-            0,
-            0,
-            1
-          ],
-          [
-            0,
-            3,
-            0,
-            1
-          ],
-          [
-            0,
-            0,
             4,
+            0,
+            0,
             0
           ],
           [
             0,
+            3,
             0,
+            1
+          ],
+          [
             1,
+            0,
+            3,
+            0
+          ],
+          [
+            1,
+            0,
+            0,
             2
           ]
         ],
@@ -1097,19 +2314,19 @@
         ],
         "raw_predictions": [
           0,
-          3,
           0,
           0,
-          1,
+          0,
           1,
           1,
           3,
+          1,
           2,
           2,
           2,
-          2,
+          0,
           3,
-          2,
+          0,
           3
         ],
         "gated_predictions": [
@@ -1153,1234 +2370,15 @@
         "gate_neutral_changes": 0,
         "gate_net_benefit": 3,
         "estimated_cost": {
-          "raw_mean_units": 1.2667,
-          "gated_mean_units": 1.2,
-          "rule_only_mean_units": 1.2,
-          "unit_definition": "single_worker=1, parallel_A_B=2"
-        },
-        "gate_reasons": {
-          "low_confidence": 6,
-          "intent_confidence_override": 4,
-          "explicit_text_only": 1,
-          "complex_keyword": 3,
-          "multi_image": 1,
-          "low_margin": 1
-        },
-        "scene_hints": [
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "safety",
-            "confidence": 0.839,
-            "evidence": "red_warning_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.317,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          }
-        ]
-      },
-      "latency": {
-        "count": 15,
-        "p50_ms": 9.099,
-        "p95_ms": 13.844,
-        "max_ms": 14.788
-      }
-    },
-    {
-      "seed": 27,
-      "validation": {
-        "accuracy": 0.75,
-        "raw_accuracy": 0.875,
-        "gated_accuracy": 0.75,
-        "raw_metrics": {
-          "accuracy": 0.875,
-          "macro_f1": 0.873,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 0.8,
-              "recall": 1.0,
-              "f1": 0.8889,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 0.8,
-              "recall": 1.0,
-              "f1": 0.8889,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
-              "support": 4
-            }
-          }
-        },
-        "gated_metrics": {
-          "accuracy": 0.75,
-          "macro_f1": 0.75,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.5,
-              "recall": 1.0,
-              "f1": 0.6667,
-              "support": 4
-            }
-          }
-        },
-        "rule_only_metrics": {
-          "accuracy": 0.6875,
-          "macro_f1": 0.6705,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 0.25,
-              "f1": 0.4,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.4444,
-              "recall": 1.0,
-              "f1": 0.6154,
-              "support": 4
-            }
-          }
-        },
-        "raw_confusion_matrix": [
-          [
-            3,
-            1,
-            0,
-            0
-          ],
-          [
-            0,
-            4,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            4,
-            0
-          ],
-          [
-            0,
-            0,
-            1,
-            3
-          ]
-        ],
-        "gated_confusion_matrix": [
-          [
-            4,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            2,
-            0,
-            2
-          ],
-          [
-            0,
-            0,
-            2,
-            2
-          ],
-          [
-            0,
-            0,
-            0,
-            4
-          ]
-        ],
-        "raw_predictions": [
-          0,
-          1,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          2,
-          3
-        ],
-        "gated_predictions": [
-          0,
-          0,
-          0,
-          0,
-          3,
-          1,
-          1,
-          3,
-          2,
-          3,
-          3,
-          2,
-          3,
-          3,
-          3,
-          3
-        ],
-        "rule_only_predictions": [
-          0,
-          0,
-          0,
-          0,
-          3,
-          1,
-          3,
-          3,
-          2,
-          3,
-          3,
-          2,
-          3,
-          3,
-          3,
-          3
-        ],
-        "gate_changes": 6,
-        "gate_change_rate": 0.375,
-        "gate_corrections": 2,
-        "gate_regressions": 4,
-        "gate_neutral_changes": 0,
-        "gate_net_benefit": -2,
-        "estimated_cost": {
-          "raw_mean_units": 1.1875,
-          "gated_mean_units": 1.5,
-          "rule_only_mean_units": 1.5625,
-          "unit_definition": "single_worker=1, parallel_A_B=2"
-        },
-        "gate_reasons": {
-          "low_confidence": 11,
-          "intent_confidence_override": 7,
-          "low_margin": 3,
-          "image_query_conflict": 4,
-          "ambiguous_conflict_escalation": 4,
-          "complex_keyword": 3,
-          "high_risk": 1,
-          "uncertain": 1
-        },
-        "scene_hints": [
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.4,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.468,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.302,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          }
-        ]
-      },
-      "test": {
-        "accuracy": 1.0,
-        "raw_accuracy": 0.8666666666666667,
-        "gated_accuracy": 1.0,
-        "raw_metrics": {
-          "accuracy": 0.8667,
-          "macro_f1": 0.874,
-          "per_class": {
-            "Worker-A": {
-              "precision": 0.75,
-              "recall": 0.75,
-              "f1": 0.75,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 0.8,
-              "recall": 1.0,
-              "f1": 0.8889,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 3
-            }
-          }
-        },
-        "gated_metrics": {
-          "accuracy": 1.0,
-          "macro_f1": 1.0,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 3
-            }
-          }
-        },
-        "rule_only_metrics": {
-          "accuracy": 1.0,
-          "macro_f1": 1.0,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 3
-            }
-          }
-        },
-        "raw_confusion_matrix": [
-          [
-            3,
-            0,
-            1,
-            0
-          ],
-          [
-            1,
-            3,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            4,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            3
-          ]
-        ],
-        "gated_confusion_matrix": [
-          [
-            4,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            4,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            4,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            3
-          ]
-        ],
-        "raw_predictions": [
-          2,
-          0,
-          0,
-          0,
-          1,
-          1,
-          0,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          3
-        ],
-        "gated_predictions": [
-          0,
-          0,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          3
-        ],
-        "rule_only_predictions": [
-          0,
-          0,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          3
-        ],
-        "gate_changes": 2,
-        "gate_change_rate": 0.1333,
-        "gate_corrections": 2,
-        "gate_regressions": 0,
-        "gate_neutral_changes": 0,
-        "gate_net_benefit": 2,
-        "estimated_cost": {
           "raw_mean_units": 1.2,
           "gated_mean_units": 1.2,
           "rule_only_mean_units": 1.2,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 9,
-          "intent_confidence_override": 6,
-          "low_margin": 1,
-          "explicit_text_only": 1,
-          "complex_keyword": 3,
-          "multi_image": 1
-        },
-        "scene_hints": [
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "safety",
-            "confidence": 0.839,
-            "evidence": "red_warning_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.317,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          }
-        ]
-      },
-      "latency": {
-        "count": 15,
-        "p50_ms": 8.926,
-        "p95_ms": 13.912,
-        "max_ms": 14.564
-      }
-    }
-  ],
-  "ablations": {
-    "text_only": {
-      "seed": 7,
-      "validation": {
-        "accuracy": 0.75,
-        "raw_accuracy": 0.5625,
-        "gated_accuracy": 0.75,
-        "raw_metrics": {
-          "accuracy": 0.5625,
-          "macro_f1": 0.5357,
-          "per_class": {
-            "Worker-A": {
-              "precision": 0.5,
-              "recall": 0.25,
-              "f1": 0.3333,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 0.5,
-              "recall": 1.0,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 0.6667,
-              "recall": 0.5,
-              "f1": 0.5714,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.6667,
-              "recall": 0.5,
-              "f1": 0.5714,
-              "support": 4
-            }
-          }
-        },
-        "gated_metrics": {
-          "accuracy": 0.75,
-          "macro_f1": 0.75,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.5,
-              "recall": 1.0,
-              "f1": 0.6667,
-              "support": 4
-            }
-          }
-        },
-        "rule_only_metrics": {
-          "accuracy": 0.6875,
-          "macro_f1": 0.6705,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 0.25,
-              "f1": 0.4,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.4444,
-              "recall": 1.0,
-              "f1": 0.6154,
-              "support": 4
-            }
-          }
-        },
-        "raw_confusion_matrix": [
-          [
-            1,
-            2,
-            0,
-            1
-          ],
-          [
-            0,
-            4,
-            0,
-            0
-          ],
-          [
-            0,
-            2,
-            2,
-            0
-          ],
-          [
-            1,
-            0,
-            1,
-            2
-          ]
-        ],
-        "gated_confusion_matrix": [
-          [
-            4,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            2,
-            0,
-            2
-          ],
-          [
-            0,
-            0,
-            2,
-            2
-          ],
-          [
-            0,
-            0,
-            0,
-            4
-          ]
-        ],
-        "raw_predictions": [
-          1,
-          1,
-          0,
-          3,
-          1,
-          1,
-          1,
-          1,
-          1,
-          2,
-          1,
-          2,
-          3,
-          2,
-          3,
-          0
-        ],
-        "gated_predictions": [
-          0,
-          0,
-          0,
-          0,
-          3,
-          1,
-          1,
-          3,
-          2,
-          3,
-          3,
-          2,
-          3,
-          3,
-          3,
-          3
-        ],
-        "rule_only_predictions": [
-          0,
-          0,
-          0,
-          0,
-          3,
-          1,
-          3,
-          3,
-          2,
-          3,
-          3,
-          2,
-          3,
-          3,
-          3,
-          3
-        ],
-        "gate_changes": 10,
-        "gate_change_rate": 0.625,
-        "gate_corrections": 6,
-        "gate_regressions": 3,
-        "gate_neutral_changes": 1,
-        "gate_net_benefit": 3,
-        "estimated_cost": {
-          "raw_mean_units": 1.1875,
-          "gated_mean_units": 1.5,
-          "rule_only_mean_units": 1.5625,
-          "unit_definition": "single_worker=1, parallel_A_B=2"
-        },
-        "gate_reasons": {
-          "low_confidence": 11,
-          "low_margin": 3,
-          "intent_confidence_override": 5,
-          "image_query_conflict": 4,
-          "ambiguous_conflict_escalation": 4,
-          "complex_keyword": 3,
-          "high_risk": 1,
-          "uncertain": 1
-        },
-        "scene_hints": [
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.4,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.468,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "open",
-            "confidence": 0.302,
-            "evidence": "blue_open_scene_dominance"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "report",
-            "confidence": 0.78,
-            "evidence": "purple_document_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          },
-          {
-            "scene": "unknown",
-            "confidence": 0.0,
-            "evidence": "no_stable_scene_hint"
-          },
-          {
-            "scene": "shelf",
-            "confidence": 0.72,
-            "evidence": "warm_shelf_background"
-          }
-        ]
-      },
-      "test": {
-        "accuracy": 1.0,
-        "raw_accuracy": 0.5333333333333333,
-        "gated_accuracy": 1.0,
-        "raw_metrics": {
-          "accuracy": 0.5333,
-          "macro_f1": 0.4583,
-          "per_class": {
-            "Worker-A": {
-              "precision": 0.6,
-              "recall": 0.75,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 0.5,
-              "recall": 0.5,
-              "f1": 0.5,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 0.6,
-              "recall": 0.75,
-              "f1": 0.6667,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 0.0,
-              "recall": 0.0,
-              "f1": 0.0,
-              "support": 3
-            }
-          }
-        },
-        "gated_metrics": {
-          "accuracy": 1.0,
-          "macro_f1": 1.0,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 3
-            }
-          }
-        },
-        "rule_only_metrics": {
-          "accuracy": 1.0,
-          "macro_f1": 1.0,
-          "per_class": {
-            "Worker-A": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-B": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-C": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 4
-            },
-            "Worker-D": {
-              "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
-              "support": 3
-            }
-          }
-        },
-        "raw_confusion_matrix": [
-          [
-            3,
-            1,
-            0,
-            0
-          ],
-          [
-            0,
-            2,
-            1,
-            1
-          ],
-          [
-            1,
-            0,
-            3,
-            0
-          ],
-          [
-            1,
-            1,
-            1,
-            0
-          ]
-        ],
-        "gated_confusion_matrix": [
-          [
-            4,
-            0,
-            0,
-            0
-          ],
-          [
-            0,
-            4,
-            0,
-            0
-          ],
-          [
-            0,
-            0,
-            4,
-            0
-          ],
-          [
-            0,
-            0,
-            0,
-            3
-          ]
-        ],
-        "raw_predictions": [
-          1,
-          0,
-          0,
-          0,
-          1,
-          1,
-          3,
-          2,
-          2,
-          2,
-          2,
-          0,
-          2,
-          0,
-          1
-        ],
-        "gated_predictions": [
-          0,
-          0,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          3
-        ],
-        "rule_only_predictions": [
-          0,
-          0,
-          0,
-          0,
-          1,
-          1,
-          1,
-          1,
-          2,
-          2,
-          2,
-          2,
-          3,
-          3,
-          3
-        ],
-        "gate_changes": 7,
-        "gate_change_rate": 0.4667,
-        "gate_corrections": 7,
-        "gate_regressions": 0,
-        "gate_neutral_changes": 0,
-        "gate_net_benefit": 7,
-        "estimated_cost": {
-          "raw_mean_units": 1.0667,
-          "gated_mean_units": 1.2,
-          "rule_only_mean_units": 1.2,
-          "unit_definition": "single_worker=1, parallel_A_B=2"
-        },
-        "gate_reasons": {
-          "low_confidence": 9,
-          "intent_confidence_override": 6,
+          "low_confidence": 6,
+          "intent_confidence_override": 3,
+          "intent_override": 1,
           "low_margin": 2,
           "explicit_text_only": 1,
           "complex_keyword": 3,
@@ -2466,20 +2464,20 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 9.185,
-        "p95_ms": 14.339,
-        "max_ms": 15.037
+        "p50_ms": 8.874,
+        "p95_ms": 14.997,
+        "max_ms": 18.843
       }
     },
     "image_only": {
       "seed": 7,
       "validation": {
         "accuracy": 0.6875,
-        "raw_accuracy": 0.25,
+        "raw_accuracy": 0.1875,
         "gated_accuracy": 0.6875,
         "raw_metrics": {
-          "accuracy": 0.25,
-          "macro_f1": 0.1,
+          "accuracy": 0.1875,
+          "macro_f1": 0.0833,
           "per_class": {
             "Worker-A": {
               "precision": 0.0,
@@ -2488,9 +2486,9 @@
               "support": 4
             },
             "Worker-B": {
-              "precision": 0.25,
-              "recall": 1.0,
-              "f1": 0.4,
+              "precision": 0.2143,
+              "recall": 0.75,
+              "f1": 0.3333,
               "support": 4
             },
             "Worker-C": {
@@ -2570,15 +2568,15 @@
         "raw_confusion_matrix": [
           [
             0,
-            4,
+            3,
             0,
-            0
+            1
           ],
           [
             0,
-            4,
+            3,
             0,
-            0
+            1
           ],
           [
             0,
@@ -2622,12 +2620,12 @@
         "raw_predictions": [
           1,
           1,
+          3,
           1,
           1,
           1,
           1,
-          1,
-          1,
+          3,
           1,
           1,
           1,
@@ -2673,22 +2671,22 @@
           3,
           3
         ],
-        "gate_changes": 15,
-        "gate_change_rate": 0.9375,
+        "gate_changes": 14,
+        "gate_change_rate": 0.875,
         "gate_corrections": 10,
-        "gate_regressions": 3,
+        "gate_regressions": 2,
         "gate_neutral_changes": 2,
-        "gate_net_benefit": 7,
+        "gate_net_benefit": 8,
         "estimated_cost": {
-          "raw_mean_units": 1.0,
+          "raw_mean_units": 1.125,
           "gated_mean_units": 1.5625,
           "rule_only_mean_units": 1.5625,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 15,
-          "intent_confidence_override": 6,
-          "intent_override": 1,
+          "low_confidence": 16,
+          "intent_confidence_override": 7,
+          "low_margin": 3,
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
           "complex_keyword": 3,
@@ -2988,10 +2986,10 @@
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 4,
-          "intent_confidence_override": 3,
-          "intent_override": 4,
+          "low_confidence": 9,
+          "intent_confidence_override": 7,
           "explicit_text_only": 1,
+          "intent_override": 1,
           "complex_keyword": 3,
           "multi_image": 1
         },
@@ -3075,43 +3073,43 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 9.007,
-        "p95_ms": 14.027,
-        "max_ms": 14.841
+        "p50_ms": 9.035,
+        "p95_ms": 14.111,
+        "max_ms": 15.102
       }
     },
     "multimodal": {
       "seed": 7,
       "validation": {
         "accuracy": 0.75,
-        "raw_accuracy": 0.6875,
+        "raw_accuracy": 0.8125,
         "gated_accuracy": 0.75,
         "raw_metrics": {
-          "accuracy": 0.6875,
-          "macro_f1": 0.6878,
+          "accuracy": 0.8125,
+          "macro_f1": 0.8016,
           "per_class": {
             "Worker-A": {
-              "precision": 0.5,
+              "precision": 0.6667,
               "recall": 0.5,
-              "f1": 0.5,
+              "f1": 0.5714,
               "support": 4
             },
             "Worker-B": {
-              "precision": 0.5714,
+              "precision": 0.8,
               "recall": 1.0,
-              "f1": 0.7273,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-C": {
-              "precision": 1.0,
-              "recall": 0.75,
-              "f1": 0.8571,
+              "precision": 0.8,
+              "recall": 1.0,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-D": {
               "precision": 1.0,
-              "recall": 0.5,
-              "f1": 0.6667,
+              "recall": 0.75,
+              "f1": 0.8571,
               "support": 4
             }
           }
@@ -3179,8 +3177,8 @@
         "raw_confusion_matrix": [
           [
             2,
-            2,
-            0,
+            1,
+            1,
             0
           ],
           [
@@ -3191,15 +3189,15 @@
           ],
           [
             0,
-            1,
-            3,
+            0,
+            4,
             0
           ],
           [
-            2,
+            1,
             0,
             0,
-            2
+            3
           ]
         ],
         "gated_confusion_matrix": [
@@ -3231,19 +3229,19 @@
         "raw_predictions": [
           0,
           1,
+          2,
           0,
           1,
           1,
           1,
           1,
-          1,
           2,
           2,
-          1,
+          2,
           2,
           3,
           3,
-          0,
+          3,
           0
         ],
         "gated_predictions": [
@@ -3282,22 +3280,22 @@
           3,
           3
         ],
-        "gate_changes": 8,
-        "gate_change_rate": 0.5,
-        "gate_corrections": 4,
-        "gate_regressions": 3,
-        "gate_neutral_changes": 1,
-        "gate_net_benefit": 1,
+        "gate_changes": 7,
+        "gate_change_rate": 0.4375,
+        "gate_corrections": 3,
+        "gate_regressions": 4,
+        "gate_neutral_changes": 0,
+        "gate_net_benefit": -1,
         "estimated_cost": {
-          "raw_mean_units": 1.125,
+          "raw_mean_units": 1.1875,
           "gated_mean_units": 1.5,
           "rule_only_mean_units": 1.5625,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 9,
-          "intent_confidence_override": 4,
+          "low_confidence": 5,
           "low_margin": 2,
+          "intent_confidence_override": 3,
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
           "complex_keyword": 3,
@@ -3389,16 +3387,16 @@
       },
       "test": {
         "accuracy": 1.0,
-        "raw_accuracy": 0.8,
+        "raw_accuracy": 0.8666666666666667,
         "gated_accuracy": 1.0,
         "raw_metrics": {
-          "accuracy": 0.8,
-          "macro_f1": 0.7615,
+          "accuracy": 0.8667,
+          "macro_f1": 0.8587,
           "per_class": {
             "Worker-A": {
-              "precision": 0.6667,
+              "precision": 0.8,
               "recall": 1.0,
-              "f1": 0.8,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-B": {
@@ -3415,8 +3413,8 @@
             },
             "Worker-D": {
               "precision": 1.0,
-              "recall": 0.3333,
-              "f1": 0.5,
+              "recall": 0.6667,
+              "f1": 0.8,
               "support": 3
             }
           }
@@ -3501,10 +3499,10 @@
             0
           ],
           [
-            1,
+            0,
             1,
             0,
-            1
+            2
           ]
         ],
         "gated_confusion_matrix": [
@@ -3547,7 +3545,7 @@
           2,
           0,
           3,
-          0,
+          3,
           1
         ],
         "gated_predictions": [
@@ -3584,22 +3582,22 @@
           3,
           3
         ],
-        "gate_changes": 3,
-        "gate_change_rate": 0.2,
-        "gate_corrections": 3,
+        "gate_changes": 2,
+        "gate_change_rate": 0.1333,
+        "gate_corrections": 2,
         "gate_regressions": 0,
         "gate_neutral_changes": 0,
-        "gate_net_benefit": 3,
+        "gate_net_benefit": 2,
         "estimated_cost": {
-          "raw_mean_units": 1.0667,
+          "raw_mean_units": 1.1333,
           "gated_mean_units": 1.2,
           "rule_only_mean_units": 1.2,
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 7,
-          "intent_confidence_override": 5,
-          "low_margin": 3,
+          "low_confidence": 3,
+          "low_margin": 2,
+          "intent_confidence_override": 2,
           "explicit_text_only": 1,
           "complex_keyword": 3,
           "multi_image": 1
@@ -3684,9 +3682,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 9.491,
-        "p95_ms": 14.164,
-        "max_ms": 15.258
+        "p50_ms": 9.095,
+        "p95_ms": 15.041,
+        "max_ms": 15.061
       }
     },
     "signals_only": {
@@ -3904,9 +3902,11 @@
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
+          "low_confidence": 1,
+          "low_margin": 1,
+          "intent_confidence_override": 1,
           "image_query_conflict": 4,
           "ambiguous_conflict_escalation": 4,
-          "low_confidence": 2,
           "complex_keyword": 3,
           "high_risk": 1,
           "uncertain": 1
@@ -3996,22 +3996,22 @@
       },
       "test": {
         "accuracy": 1.0,
-        "raw_accuracy": 1.0,
+        "raw_accuracy": 0.9333333333333333,
         "gated_accuracy": 1.0,
         "raw_metrics": {
-          "accuracy": 1.0,
-          "macro_f1": 1.0,
+          "accuracy": 0.9333,
+          "macro_f1": 0.9365,
           "per_class": {
             "Worker-A": {
               "precision": 1.0,
-              "recall": 1.0,
-              "f1": 1.0,
+              "recall": 0.75,
+              "f1": 0.8571,
               "support": 4
             },
             "Worker-B": {
-              "precision": 1.0,
+              "precision": 0.8,
               "recall": 1.0,
-              "f1": 1.0,
+              "f1": 0.8889,
               "support": 4
             },
             "Worker-C": {
@@ -4090,8 +4090,8 @@
         },
         "raw_confusion_matrix": [
           [
-            4,
-            0,
+            3,
+            1,
             0,
             0
           ],
@@ -4142,7 +4142,7 @@
         ],
         "raw_predictions": [
           0,
-          0,
+          1,
           0,
           0,
           1,
@@ -4191,12 +4191,12 @@
           3,
           3
         ],
-        "gate_changes": 0,
-        "gate_change_rate": 0.0,
-        "gate_corrections": 0,
+        "gate_changes": 1,
+        "gate_change_rate": 0.0667,
+        "gate_corrections": 1,
         "gate_regressions": 0,
         "gate_neutral_changes": 0,
-        "gate_net_benefit": 0,
+        "gate_net_benefit": 1,
         "estimated_cost": {
           "raw_mean_units": 1.2,
           "gated_mean_units": 1.2,
@@ -4204,7 +4204,8 @@
           "unit_definition": "single_worker=1, parallel_A_B=2"
         },
         "gate_reasons": {
-          "low_confidence": 2,
+          "low_confidence": 1,
+          "low_margin": 1,
           "intent_confidence_override": 1,
           "explicit_text_only": 1,
           "complex_keyword": 3,
@@ -4290,9 +4291,9 @@
       },
       "latency": {
         "count": 15,
-        "p50_ms": 9.124,
-        "p95_ms": 15.318,
-        "max_ms": 18.989
+        "p50_ms": 9.065,
+        "p95_ms": 16.049,
+        "max_ms": 16.837
       }
     }
   }

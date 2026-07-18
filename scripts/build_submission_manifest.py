@@ -17,15 +17,18 @@ def included(path: Path) -> bool:
         return False
     if "/__pycache__/" in f"/{relative}/" or path.suffix in {".pyc", ".pyo"}:
         return False
-    if "/analysis/" in f"/{relative}/":
-        return False
     if path.suffix == ".png" and "/fixtures/" in f"/{relative}/":
+        return False
+    if path.suffix == ".log":
         return False
     if relative == "submission/innovation/router_incremental.npy":
         return False
     return relative.startswith("submission/") or relative in {
         "README.md",
         "requirements.txt",
+        "requirements-gpu.txt",
+        "Makefile",
+        ".env.example",
         ".gitignore",
     }
 

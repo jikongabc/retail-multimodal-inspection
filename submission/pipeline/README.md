@@ -4,23 +4,21 @@ Python 3.10+；依赖 `numpy`、`Pillow`。
 
 ## 运行
 
-在仓库根目录执行：
-
 ```bash
 python -m submission.pipeline.demos.run_demos
 ```
 
 路由器加载 `submission/router/router_weights.npy`，逐图执行图文路由。Worker Pool 支持 A/B/C/D，D 并行调用 A、B。中间结果写入进程内 KV Store，合成器输出结构化 JSON。结果保存在 `submission/pipeline/demos/scenario_*/output.json`。
 
-也可以直接运行单次请求：
+单次请求：
 
 ```bash
 python submission/pipeline/inspection_pipeline.py \
-  --images submission/router/fixtures/a_00.png submission/router/fixtures/a_01.png \
+  --images submission/router/fixtures/a_00.jpg submission/router/fixtures/a_01.jpg \
   --inspection-type 商品盘点 --store-id store-demo
 ```
 
-运行仓库级 smoke test：
+测试：
 
 ```bash
 python -m unittest discover -v
@@ -37,6 +35,18 @@ python submission/pipeline/inspection_pipeline.py --worker-mode real \
   --images submission/router/fixtures/a_00.png --inspection-type 合规检查
 ```
 
+真实服务与云端验收：
+
+```bash
+python -m submission.services.ostrakon_server \
+  --model-path /path/to/Ostrakon-VL-8B --port 8000
+
+make init-gpu-cloud
+make real-e2e-cloud
+```
+
+`real-e2e-cloud` 仅监听 `127.0.0.1`，结束后关闭服务并拉回 `demos/real_cloud/output.json` 与 `verification.json`。
+
 ## 输出
 
 - `routing_log` 同时记录 raw Worker、最终 Worker、升级原因、路由延迟和执行延迟。
@@ -46,12 +56,10 @@ python submission/pipeline/inspection_pipeline.py --worker-mode real \
 - `output.json` 返回前执行 Schema 校验。
 - 真实 Worker 返回非法 JSON 时保留原文，并在 `error`/`warnings` 中标记解析失败。
 
-三组 Demo 的输入清单、路由日志、完整 JSON 和摘要分别位于：
-
-- `demos/scenario_1_inventory/`
-- `demos/scenario_2_compliance/`
-- `demos/scenario_3_comprehensive/`
-
-每组目录还包含 `screenshot.png`，展示路由日志、合成结果和完整输出 JSON。
+| Demo | 内容 |
+|---|---|
+| `demos/scenario_1_inventory/` | 货架盘点 |
+| `demos/scenario_2_compliance/` | 高风险合规 |
+| `demos/scenario_3_comprehensive/` | 综合评估、错误路由和冲突证据 |
 
 Demo 图片为可控测试夹具，不代表真实门店采集数据。

@@ -24,7 +24,7 @@
 | LiteLLM | 1.92.0 |
 | Pillow | 11.3.0 |
 
-说明：`nvidia-smi` 的 CUDA 13.0 表示驱动可支持的最高 CUDA 版本；当前 PyTorch wheel 实际使用 CUDA 12.8。二者不冲突。
+`nvidia-smi` 的 CUDA 13.0 是驱动支持上限；PyTorch wheel 使用 CUDA 12.8。
 
 ## 2. OpenFugu 验证
 
@@ -40,7 +40,7 @@
 | 服务端口 | 6008 |
 | 最大协作轮次 | 2（响应中的 `fugu_turns` 含调度计数，可能显示为 2 或 3） |
 
-Worker 使用 DeepSeek Chat、GLM-4.5-Flash，服务端口为 6008。路由器、双槽位调度和 OpenAI 兼容接口保持不变。密钥通过环境变量传入，未写入代码、日志或仓库。
+密钥仅通过环境变量传入。
 
 ### 2.2 自测结果
 
@@ -64,7 +64,7 @@ OpenFugu checkpoint 与实现匹配，自测通过。证据：`screenshots/openf
 | 零售巡检分析 | DeepSeek + GLM 真实双 Worker | 25,860.765 |
 | **算术平均** |  | **19,283.370** |
 
-三类请求均返回 `model=fugu`、非空真实答案和协作轮次。补充证据为 `screenshots/openfugu_server_real.png` 与 `screenshots/openfugu_3queries_real.png`。
+三类请求均返回 `model=fugu`、非空真实答案和协作轮次。证据为 `screenshots/openfugu_server_real.png` 与 `screenshots/openfugu_3queries_real.png`。
 
 ## 3. Ostrakon-VL-8B 五场景验证
 
@@ -96,11 +96,11 @@ OpenFugu checkpoint 与实现匹配，自测通过。证据：`screenshots/openf
 | 缺货识别 | 1001.8 / 1002.8 / 1021.1 | 1,008.6 | 16,821.4 | 输出有货 3、空位 15、总位 18、缺货率 83.3% | 计数偏差 |
 | **五场景平均/最大值** |  | **1,231.1** | **16,821.4** |  | 4/5 场景结论符合夹具标注 |
 
-缺货测试图的真实标注为：有货位 4、空货位 17、总货位 21、缺货率约 80.95%。模型漏计 3 个货位并漏计 1 个有货位，说明其对密集规则网格的精确计数仍有限制。该错误予以保留，不对结果进行人工修饰。
+缺货测试图标注为有货位 4、空货位 17、总货位 21、缺货率约 80.95%。模型漏计 3 个货位和 1 个有货位，表明密集规则网格计数仍不稳定。
 
-货架盘点首轮 1930.0 ms 明显高于后两轮，反映首次生成的缓存预热开销；报告保留首轮并纳入平均值，避免选择性剔除数据。
+货架盘点平均值包含首轮 1930.0 ms 冷启动。
 
-完整证据见：
+证据：
 
 - `screenshots/ostrakon_5scenes.png`
 - 云端 `/root/autodl-tmp/ostrakon_task0/ostrakon_5scenes_results.json`
@@ -113,14 +113,4 @@ OpenFugu checkpoint 与实现匹配，自测通过。证据：`screenshots/openf
 | OpenFugu + DeepSeek/GLM | 三类真实 API 端到端请求 | 19,283.370 | 未单独隔离测量 | 包含网络、远程 API 和多轮协作 |
 | Ostrakon-VL-8B | 五场景、本地 BF16、每场景 3 次 | 1,231.1 | 16,821.4 | 仅计 `model.generate` |
 
-两项延迟的测量边界不同，不能据此直接判断模型本体快慢；该表用于报告实际 Task 0 工作流体验。
-
-## 5. Task 0 交付核对
-
-- [x] `screenshots/openfugu_selftest.png`：终端中包含 97%、100% 和 PASS。
-- [x] `screenshots/ostrakon_5scenes.png`：包含五场景输出、平均延迟和显存。
-- [x] `env_report.md`：即本文件。
-- [x] 补充证据：`screenshots/openfugu_server_real.png`。
-- [x] 补充证据：`screenshots/openfugu_3queries_real.png`。
-
-截图文件位于 `submission/screenshots/`。
+两项延迟的测量边界不同，不能直接比较模型速度。

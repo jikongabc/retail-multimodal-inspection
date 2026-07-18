@@ -1,14 +1,14 @@
 {
   "store_id": "store-safety-002",
-  "inspection_time": "2026-07-18T04:19:57Z",
+  "inspection_time": "2026-07-18T08:29:02Z",
   "overall_score": 45,
   "routing_log": [
     {
       "image": "exit_obstructed.png",
       "worker": "Worker-D",
-      "latency_ms": 11.076,
-      "route_latency_ms": 10.466,
-      "worker_latency_ms": 0.61,
+      "latency_ms": 11.961,
+      "route_latency_ms": 11.184,
+      "worker_latency_ms": 0.776,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.6929,
@@ -19,6 +19,8 @@
         "multi_image"
       ],
       "query_intent": "complex",
+      "model_revision": "parallel(mock-worker_a-v1,mock-worker_b-v1)",
+      "mock": true,
       "execution_error": null,
       "expected_worker": "Worker-D",
       "routing_error": false
@@ -26,9 +28,9 @@
     {
       "image": "fire_exit.png",
       "worker": "Worker-D",
-      "latency_ms": 10.96,
-      "route_latency_ms": 10.382,
-      "worker_latency_ms": 0.578,
+      "latency_ms": 10.83,
+      "route_latency_ms": 10.279,
+      "worker_latency_ms": 0.551,
       "raw_worker": "Worker-D",
       "strategy": "parallel_ab_aggregate",
       "confidence": 0.7117,
@@ -39,6 +41,8 @@
         "multi_image"
       ],
       "query_intent": "complex",
+      "model_revision": "parallel(mock-worker_a-v1,mock-worker_b-v1)",
+      "mock": true,
       "execution_error": null,
       "expected_worker": "Worker-D",
       "routing_error": false

@@ -1,4 +1,4 @@
-"""Validate Task 2 JSONL records and detect split/image leakage."""
+# 校验 Task 2 JSONL 数据并检测切分泄漏。
 
 from __future__ import annotations
 
@@ -24,10 +24,10 @@ REQUIRED_FIELDS = {
 }
 
 
+# 校验路由记录并返回数据质量报告。
 def validate_records(
     records: Iterable[dict], data_path: str | Path | None = None
 ) -> dict:
-    """Return a report and raise ValueError for unsafe training data."""
     records = list(records)
     errors: list[str] = []
     seen_ids: set[str] = set()
@@ -129,7 +129,7 @@ def validate_records(
     return report
 
 
+# 加载并校验路由 JSONL 文件。
 def validate_file(path: str | Path) -> dict:
-    """Load and validate a JSONL route dataset."""
     records = load_jsonl(path)
     return validate_records(records, path)

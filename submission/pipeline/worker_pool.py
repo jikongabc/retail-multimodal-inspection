@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import base64
 import json
+import mimetypes
 import os
 import time
 import urllib.request
@@ -238,10 +239,14 @@ class OpenAICompatibleOstrakonWorker:
         role: str = "零售视觉",
     ) -> None:
         self.worker_id = worker_id
-        self.endpoint = endpoint.rstrip("/") + "/chat/completions"
+        base = endpoint.rstrip("/")
+        self.endpoint = (
+            base if base.endswith("/chat/completions") else base + "/chat/completions"
+        )
         self.model = model
         self.api_key = api_key
         self.role = role
+        self.timeout_seconds = float(os.getenv("WORKER_TIMEOUT_SECONDS", "180"))
 
     # 调用 OpenAI 兼容视觉接口。
     def analyze(
@@ -250,9 +255,13 @@ class OpenAICompatibleOstrakonWorker:
         started = time.perf_counter()
         try:
             encoded = base64.b64encode(Path(image_path).read_bytes()).decode("ascii")
+            media_type = mimetypes.guess_type(image_path)[0] or "image/jpeg"
             prompt = (
                 f"你是{self.role} Worker。巡检类型：{inspection_type}。\n{query}\n"
-                "请只返回 JSON：{findings:[], compliance_items:[], summary:string, confidence:number}。"
+                f"图片引用固定写为 {Path(image_path).name}。只返回 JSON，不使用 Markdown。"
+                "findings 中每项必须包含 category、severity(high|med|low)、description、image_ref；"
+                "compliance_items 中每项必须包含 item、status(pass|fail|unclear)、evidence；"
+                "顶层必须包含 findings、compliance_items、summary、confidence(0到1)。"
             )
             payload = {
                 "model": self.model,
@@ -265,7 +274,7 @@ class OpenAICompatibleOstrakonWorker:
                             {
                                 "type": "image_url",
                                 "image_url": {
-                                    "url": f"data:image/png;base64,{encoded}"
+                                    "url": f"data:{media_type};base64,{encoded}"
                                 },
                             },
                         ],
@@ -285,17 +294,22 @@ class OpenAICompatibleOstrakonWorker:
                 },
                 method="POST",
             )
-            with urllib.request.urlopen(request, timeout=120) as response:
+            with urllib.request.urlopen(
+                request, timeout=self.timeout_seconds
+            ) as response:
                 body = json.loads(response.read().decode("utf-8"))
             text = body["choices"][0]["message"]["content"]
             parsed = _extract_json(text)
+            findings = _normalize_real_findings(parsed, image_path)
+            compliance_items = _normalize_real_compliance(parsed)
+            confidence = float(parsed.get("confidence", 0.5))
             return WorkerResult(
                 self.worker_id,
                 image_path,
                 text,
-                findings=parsed.get("findings", []),
-                compliance_items=parsed.get("compliance_items", []),
-                confidence=float(parsed.get("confidence", 0.5)),
+                findings=findings,
+                compliance_items=compliance_items,
+                confidence=max(0.0, min(confidence, 1.0)),
                 latency_ms=(time.perf_counter() - started) * 1000,
                 error=parsed.get("_parse_error"),
                 model_revision=self.model,
@@ -303,6 +317,7 @@ class OpenAICompatibleOstrakonWorker:
                     "request_id": request_id,
                     "mock": False,
                     "endpoint": self.endpoint,
+                    "response_model": body.get("model", self.model),
                 },
             )
         except Exception as exc:
@@ -342,6 +357,82 @@ def _extract_json(text: str) -> dict[str, Any]:
                 "_parse_error": "worker output contained invalid JSON",
             }
     return value if isinstance(value, dict) else {"summary": stripped}
+
+
+# 将真实模型发现归一化为 Pipeline 契约。
+def _normalize_real_findings(
+    parsed: dict[str, Any], image_path: str
+) -> list[dict[str, str]]:
+    source = parsed.get("findings", [])
+    if not isinstance(source, list):
+        return []
+    normalized: list[dict[str, str]] = []
+    for item in source:
+        if not isinstance(item, dict):
+            continue
+        category = item.get("category") or item.get("item") or item.get("location")
+        description = (
+            item.get("description") or item.get("evidence") or parsed.get("summary")
+        )
+        if not category or not description:
+            continue
+        severity = str(item.get("severity", "low")).lower()
+        severity = {"medium": "med", "中": "med", "高": "high", "低": "low"}.get(
+            severity, severity
+        )
+        if severity not in {"high", "med", "low"}:
+            severity = "low"
+        count = item.get("count")
+        if count is not None and "数量" not in str(description):
+            description = f"{description}；数量：{count}"
+        normalized.append(
+            {
+                "category": str(category),
+                "severity": severity,
+                "description": str(description),
+                "image_ref": Path(image_path).name,
+            }
+        )
+    return normalized
+
+
+# 将真实模型合规状态归一化为固定枚举。
+def _normalize_real_compliance(parsed: dict[str, Any]) -> list[dict[str, str]]:
+    source = parsed.get("compliance_items", [])
+    if not isinstance(source, list):
+        return []
+    normalized: list[dict[str, str]] = []
+    pass_values = {"pass", "passed", "compliant", "合规", "正常", "无", "不存在"}
+    fail_values = {
+        "fail",
+        "failed",
+        "non-compliant",
+        "noncompliant",
+        "不合规",
+        "异常",
+        "有",
+        "存在",
+    }
+    for item in source:
+        if not isinstance(item, dict) or not item.get("item"):
+            continue
+        raw_status = str(item.get("status", "unclear")).strip().lower()
+        if raw_status in pass_values:
+            status = "pass"
+        elif raw_status in fail_values:
+            status = "fail"
+        else:
+            status = "unclear"
+        normalized.append(
+            {
+                "item": str(item["item"]),
+                "status": status,
+                "evidence": str(
+                    item.get("evidence") or parsed.get("summary") or "证据不足"
+                ),
+            }
+        )
+    return normalized
 
 
 # 调度 A、B、C 和并行执行 A+B 的 D。
