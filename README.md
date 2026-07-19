@@ -127,6 +127,37 @@ python submission/pipeline/inspection_pipeline.py \
 
 ## 系统架构
 
+```mermaid
+flowchart LR
+    INPUT[门店图片 + 巡检指令] --> FEATURE[多模态特征提取<br/>64 维图像 + 96 维文本 + 16 维任务信号]
+    FEATURE --> ROUTER[708 参数路由头<br/>sep-CMA-ES 训练]
+    ROUTER --> GATE[置信度、意图、风险与复杂度门控]
+
+    GATE -->|A| A[Worker-A<br/>Ostrakon-VL-8B]
+    GATE -->|B| B[Worker-B<br/>通用 VLM]
+    GATE -->|C| C[Worker-C<br/>文本 LLM]
+    GATE -->|D| D[Worker-D<br/>A + B 并行]
+
+    A --> KV[请求级 KV Store]
+    B --> KV
+    C --> KV
+    D --> KV
+    KV --> SYNTH[证据合成<br/>去重、冲突保留、评分与建议]
+    SYNTH --> SCHEMA[Schema 门禁]
+    SCHEMA --> REPORT[结构化巡检报告]
+
+    REPORT -. 环境金标或人工纠错 .-> REACT[ReAct 反馈循环<br/>Observe → Reflect → Act]
+    REACT --> STORE[审核、去重与冲突隔离]
+    STORE --> TRAIN[旧数据 Replay + 反馈增量训练]
+    TRAIN --> REGRESSION[固定测试与挑战集回归门禁]
+    REGRESSION -->|通过| REGISTRY[模型注册、激活与热加载]
+    REGRESSION -->|失败| ROLLBACK[保留基线或回滚]
+    REGISTRY -. 新版本 .-> ROUTER
+    ROLLBACK -. 当前稳定版本 .-> ROUTER
+```
+
+实线表示一次巡检请求的运行路径，虚线表示环境反馈、增量训练和模型生命周期路径。
+
 | 层级 | 组件 | 职责 |
 |---|---|---|
 | 输入层 | `InspectionPipeline` | 校验 1–5 张图片、巡检类型、门店和请求编号 |

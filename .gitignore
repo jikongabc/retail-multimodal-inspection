@@ -1,4 +1,5 @@
-/docs/
+docs/
+!/docs/多模态零售巡检系统_项目全流程与实现细节详解.docx
 .env*
 !.env.example
 __pycache__/
